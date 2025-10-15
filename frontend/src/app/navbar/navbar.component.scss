@@ -1,0 +1,32 @@
+.bg-navbar {
+  background-color: rgba(33, 37, 41, 1.00);
+  border-bottom: 1px solid #505356;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 1px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1); // adjust based on theme
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+
+  fa-icon {
+    font-size: 1.2rem;
+  }
+}

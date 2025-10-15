@@ -1,1 +1,139 @@
-<h1>Sidebar</h1>
+<main class="d-flex flex-nowrap">
+  <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar-size">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <i class="bi bi-stopwatch fs-2 me-3"></i>
+      <span class="fs-4">Meister der Blöcke</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <!-- Visible only when logged in -->
+      <ng-container>
+        <li class="nav-item mb-2">
+          <a routerLink="/home" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.HOUSE_USER" class="me-2"></fa-icon>
+            Home
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/competitions" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.PERSON_RUNNING" class="me-2"></fa-icon>
+            Competitions
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/create/competition" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.CALENDAR_PLUS" class="me-2"></fa-icon>
+            Create Competition
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/competitions" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.GEARS" class="me-2"></fa-icon>
+            Manage Competitions
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/results" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.RANKING_STAR" class="me-2"></fa-icon>
+            Results
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/upload" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.UPLOAD" class="me-2"></fa-icon>
+            Upload Results
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/friends" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.USER_GROUP" class="me-2"></fa-icon>
+            Friends
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/leaderboard" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.TROPHY" class="me-2"></fa-icon>
+            Leaderboard
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/statistics" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.RULER_HORIZONTAL" class="me-2"></fa-icon>
+            My Statistics
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/goals" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.STAR" class="me-2"></fa-icon>
+            My Goals
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/achievements" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.MEDAL" class="me-2"></fa-icon>
+            My Achievements
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/ratings" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.STAR_HALF_STROKE" class="me-2"></fa-icon>
+            My Ratings
+          </a>
+        </li>
+      </ng-container>
+      <!-- Visible only when NOT logged in -->
+      <ng-container>
+        <li class="nav-item mb-2">
+          <a routerLink="/login" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.SIGN_IN_ALT" class="me-2"></fa-icon>
+            Login
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a routerLink="/sign-up" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.USER_PLUS" class="me-2"></fa-icon>
+            Sign Up
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <hr>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+         data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://cdn-icons-png.flaticon.com/512/384/384276.png" alt="profile icon"
+             width="32" height="32" class="rounded-circle me-2">
+        <strong>User</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <li>
+          <a class="dropdown-item disabled" href="#">
+            <fa-icon [icon]="icons.SLIDERS" class="me-2"></fa-icon>
+            Settings
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item disabled" href="#">
+            <fa-icon [icon]="icons.GEM" class="me-2"></fa-icon>
+            Premium
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item disabled" routerLink="/profile">
+            <fa-icon [icon]="icons.USER" class="me-2"></fa-icon>
+            Profile
+          </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <a class="dropdown-item pointer" (click)="logout()">
+            <fa-icon [icon]="icons.ARROW_RIGHT_FROM_BRACKET" class="me-2"></fa-icon>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>
