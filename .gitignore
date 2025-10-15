@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 /frontend/node_modules/
 /backend/node_modules/
+/frontend/.angular/cache/
