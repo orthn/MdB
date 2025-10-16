@@ -46,10 +46,10 @@ const createStudent = async (req, res) => {
 
 const createMany = async (req, res) => {
     try {
-        let { students } = req.body;
+        let {students} = req.body;
 
         if (!students) {
-            return res.status(400).json({ message: 'Missing students data' });
+            return res.status(400).json({message: 'Missing students data'});
         }
 
         // Ensure we always have an array
@@ -58,7 +58,7 @@ const createMany = async (req, res) => {
         }
 
         // Use insertMany for efficiency
-        const createdStudents = await Student.insertMany(students, { ordered: false });
+        const createdStudents = await Student.insertMany(students, {ordered: false});
 
         return res.status(201).json({
             message: `${createdStudents.length} student(s) created successfully`,
@@ -66,7 +66,7 @@ const createMany = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error', error });
+        return res.status(500).json({message: 'Internal server error', error});
     }
 };
 
@@ -117,6 +117,24 @@ const getStudentById = async (req, res) => {
     }
 }
 
+const deleteStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Using findByIdAndDelete for simplicity
+        const deletedStudent = await Student.findByIdAndDelete(id);
+
+        if (!deletedStudent) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        res.status(200).json({ message: 'Student deleted', student: deletedStudent });
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({ message: 'Failed to delete student', error });
+    }
+};
+
 module.exports = {
-    home, login, createStudent, createMany ,getStudents, getStudentById, resetPassword
+    home, login, createStudent, createMany, getStudents, getStudentById, resetPassword, deleteStudent
 };
