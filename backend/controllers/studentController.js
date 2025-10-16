@@ -122,15 +122,14 @@ const deleteStudent = async (req, res) => {
         const { id } = req.params;
 
         // Using findByIdAndDelete for simplicity
-        const deletedStudent = await Student.findByIdAndDelete(id);
+        const deletedStudent = await Student.findByIdAndDelete({_id: id});
 
         if (!deletedStudent) {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        res.status(200).json({ message: 'Student deleted', student: deletedStudent });
+        return  res.status(200).json({ message: 'Student deleted', student: deletedStudent });
     } catch (error) {
-        console.error(error);
         return res.status(400).json({ message: 'Failed to delete student', error });
     }
 };
