@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {home, createClass, getUsersOfClass, addUserToClass} = require('../controllers/classController');
+const {home, createClass, getUsersOfClass, addUserToClass, getClassById} = require('../controllers/classController');
 
 router.get('/', home);
-router.get('/getStudents', getUsersOfClass)
+router.get('/:id', getClassById)
+router.get('/:id/students', getUsersOfClass)
 
 router.post('/create', createClass);
 router.post('/addStudent', addUserToClass)

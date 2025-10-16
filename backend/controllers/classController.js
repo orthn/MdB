@@ -4,29 +4,27 @@ const home = async (req, res) => {
     res.status(200).json({message: 'Welcome to classes!'});
 }
 
-const getUsersOfClass = async (req, res) => {
+const getStudentsOfClass = async (req, res) => {
     try {
-        const {classID} = req.body;
-
-        const retrievedClass = await Class.findById({_id: classID})
+        const retrievedClass = await Class.findById({_id: req.params.id})
         if (!retrievedClass) {
             return res.status(404).json({message: 'No Class Found'});
         }
 
-        const users = retrievedClass.users;
-        if (!users) {
-            return res.status(404).json({message: 'No Users Found'});
+        const students = retrievedClass.students;
+        if (!students) {
+            return res.status(404).json({message: 'No Students Found'});
         }
 
-        return res.status(200).json({users: users})
+        return res.status(200).json({users: students})
     } catch (error) {
         return res.status(500).json({message: 'Internal server error'});
     }
 }
 
-const addUserToClass = async (req, res) => {
+const addStudentToClass = async (req, res) => {
     try {
-        const {classID, userID} = req.body;
+        const {classID, studentID} = req.body;
 
         const retrievedClass = await Class.findById({_id: classID})
         if (!retrievedClass) {
@@ -34,12 +32,12 @@ const addUserToClass = async (req, res) => {
         }
 
         // Check if user already exists in the class
-        if (retrievedClass.users.includes(userID)) {
-            return res.status(400).json({ message: 'User already in class' });
+        if (retrievedClass.students.includes(studentID)) {
+            return res.status(400).json({ message: 'Student already in class' });
         }
 
         // Add user and save
-        retrievedClass.users.push(userID);
+        retrievedClass.students.push(studentID);
         await retrievedClass.save();
 
         return res.status(200).json({message: 'Successfully added user to class'});
@@ -61,9 +59,23 @@ const createClass = async (req, res) => {
     }
 }
 
+const getClassById = async (req, res) => {
+    try {
+        const retrievedClass = await Class.findById({_id: req.params.id});
+        if (!retrievedClass) {
+            return res.status(404).json({message: 'No Class Found'});
+        }
+
+        return res.status(200).json(retrievedClass);
+    } catch (error) {
+        return res.status(500).json({message: 'Internal server error'});
+    }
+}
+
 module.exports = {
     home,
     createClass,
-    getUsersOfClass,
-    addUserToClass,
+    getUsersOfClass: getStudentsOfClass,
+    addUserToClass: addStudentToClass,
+    getClassById,
 }

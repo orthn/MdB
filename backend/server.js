@@ -1,11 +1,9 @@
 const express = require('express');
-const {connectDB} = require('./db-access/db');
+const {connectDB} = require('./database/database');
 
-const classRoutes = require('./routes/classRouter');
-const userRoutes = require('./routes/userRouter');
+const classes = require('./routes/classRouter');
+const students = require('./routes/studentRouter');
 const crypto = require("./services/cryptography");
-
-
 
 const bodyParser = require("express");
 const cors = require('cors');
@@ -44,6 +42,6 @@ app.get('/test', (req, res) => {
     res.send(pwd);
 })
 
-app.use('/users', userRoutes);
-app.use('/classes', classRoutes);
+app.use('/students', students);
+app.use('/classes', classes);
 
