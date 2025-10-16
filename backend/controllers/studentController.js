@@ -1,9 +1,9 @@
 const Student = require('../models/student');
-const crypto = require("../services/cryptography");
+const helpers = require("../services/helper");
 const jwt = require('jsonwebtoken');
 
 const home = async (req, res) => {
-    return  res.status(200).json({message: 'Welcome to students!'});
+    return res.status(200).json({message: 'Welcome to students!'});
 }
 
 const login = async (req, res) => {
@@ -35,19 +35,40 @@ const login = async (req, res) => {
 
 const createStudent = async (req, res) => {
     try {
-        const {firstName, lastName, username, gender} = req.body;
-        const pwd = crypto.generateRandomString()
+        const newStudent = new Student(req.body);
+        await newStudent.save();
 
-        const student = new Student({
-            firstName: firstName, lastName: lastName, username: username, password: pwd, gender: gender
-        });
-
-        await student.save()
-        return  res.status(201).json(student);
+        return res.status(201).json(newStudent);
     } catch (error) {
-        return  res.status(400).send({message: 'Failed to create user', error});
+        return res.status(400).json({message: 'Failed to create student', error});
     }
 }
+
+const createMany = async (req, res) => {
+    try {
+        let { students } = req.body;
+
+        if (!students) {
+            return res.status(400).json({ message: 'Missing students data' });
+        }
+
+        // Ensure we always have an array
+        if (!Array.isArray(students)) {
+            students = [students];
+        }
+
+        // Use insertMany for efficiency
+        const createdStudents = await Student.insertMany(students, { ordered: false });
+
+        return res.status(201).json({
+            message: `${createdStudents.length} student(s) created successfully`,
+            students: createdStudents,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error', error });
+    }
+};
 
 /**
  * Resets password of a given student. (Replaces old pwd with new one)
@@ -65,7 +86,7 @@ const resetPassword = async (req, res) => {
             return res.status(404).json({message: 'Student not found'});
         }
 
-        student.password = crypto.generateRandomString();
+        student.password = helpers.generateRandomPassword();
         await student.save();
 
         res.status(200).json({message: `Password of student "${student.username}" reset successfully`});
@@ -77,7 +98,7 @@ const resetPassword = async (req, res) => {
 const getStudents = async (req, res) => {
     try {
         const students = await Student.find()
-        return  res.status(200).json(students)
+        return res.status(200).json(students)
     } catch (error) {
         return res.status(400).send({message: 'Failed to retrieve students', error});
     }
@@ -97,5 +118,5 @@ const getStudentById = async (req, res) => {
 }
 
 module.exports = {
-    home, login, createStudent, getStudents, getStudentById, resetPassword
+    home, login, createStudent, createMany ,getStudents, getStudentById, resetPassword
 };
