@@ -18,7 +18,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
-connectDB()
+let timeoutForDbConnection = process.env.DB_CONNECTION_TIMEOUT || 3000;
+connectDB(timeoutForDbConnection)
     .then(() => {
         const PORT = process.env.PORT || 8000;
         app.listen(PORT, () => {
