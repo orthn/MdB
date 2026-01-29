@@ -20,6 +20,24 @@ html, body {
   }
 }
 
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.no-animations {
+  .path-node,
+  .connector,
+  .challenge-header {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+}
+
 .zoom:hover {
   transform:scale(1.01);
 }

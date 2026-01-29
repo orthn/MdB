@@ -1,0 +1,40 @@
+.level-layout {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+
+.level-header {
+  background: #1f2933;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.difficulty {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.difficulty.easy { background: #198754; }
+.difficulty.medium { background: #ffc107; color: #000; }
+.difficulty.hard { background: #dc3545; }
+
+.level-work {
+  background: #111827;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.level-support {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.level-actions {
+  display: flex;
+  justify-content: space-between;
+}

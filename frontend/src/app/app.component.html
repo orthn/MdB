@@ -3,11 +3,17 @@
     <div class="col-lg-2 bg-light p-0 h-100 hide-on-mobile">
       <app-sidebar></app-sidebar>
     </div>
-    <div class="col-lg-10 col-sm-12 p-0 overflow-auto h-100 bg-body-secondary">
+    <div class="col-lg-10 col-sm-12 p-0 overflow-auto h-100 bg-body-secondary ">
       <app-navbar></app-navbar>
       <div class="container py-3 px-5">
         <router-outlet></router-outlet>
       </div>
     </div>
+  </div>
+</div>
+
+<div *ngIf="toast.visible" class="toast-container">
+  <div class="toast-message" [ngClass]="toast.type">
+    {{ toast.message }}
   </div>
 </div>

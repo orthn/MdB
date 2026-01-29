@@ -1,0 +1,72 @@
+<app-breadcrumb [breadcrumbs]="[
+  { label: 'Dashboard', url: '/home' },
+  { label: 'Level' }
+]"></app-breadcrumb>
+
+<div *ngIf="loading" class="text-muted">
+  Lade Level...
+</div>
+
+<div *ngIf="!loading && level" class="level-layout text-white">
+  <!-- HEADER -->
+  <section class="level-header">
+    <h2>{{ level.title }}</h2>
+
+    <span class="difficulty" [ngClass]="level.difficulty">
+      {{ level.difficulty | uppercase }}
+    </span>
+
+    <p class="description">
+      Deine Aufgabe: {{ level.description }}
+    </p>
+  </section>
+
+  <!-- WORK AREA -->
+  <section class="level-work">
+
+    <!-- CODE -->
+    <app-code-editor
+      *ngIf="level.mode === 'code'"
+      [code]="userCode"
+      (codeChange)="userCode = $event">
+    </app-code-editor>
+
+    <!-- BLOCKS
+    <app-block-editor
+      *ngIf="level.mode === 'blocks'"
+      (blocksChange)="userCode = $event">
+    </app-block-editor>-->
+
+  </section>
+
+  <!-- SUPPORT -->
+  <section class="level-support">
+
+    <div class="hints" *ngIf="level.hints?.length">
+      <button class="btn btn-sm btn-outline-secondary"
+              (click)="showHint()">
+        💡 Hinweis
+      </button>
+
+      <div *ngFor="let i of usedHints" class="hint">
+        {{ level.hints![i].text }}
+      </div>
+    </div>
+
+    <div *ngIf="feedback" class="feedback error">
+      {{ feedback }}
+    </div>
+
+  </section>
+
+  <!-- ACTION BAR -->
+  <section class="level-actions">
+    <button class="btn btn-secondary" (click)="reset()">
+      Zurücksetzen
+    </button>
+
+    <button class="btn btn-primary" (click)="submit()">
+      Prüfen
+    </button>
+  </section>
+</div>

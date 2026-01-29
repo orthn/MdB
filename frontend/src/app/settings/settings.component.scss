@@ -1,0 +1,23 @@
+.settings-card {
+  background: var(--bs-dark);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  h6 {
+    margin: 0;
+    color: #fff;
+  }
+}

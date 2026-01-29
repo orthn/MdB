@@ -1,0 +1,13 @@
+<app-breadcrumb [breadcrumbs]="[
+  { label: 'Statistiken', url: '/statistics' },
+]"></app-breadcrumb>
+
+<div class="text-white">
+  <div *ngIf="loading" class="text-muted">
+    Lade Statistiken...
+  </div>
+
+  <div *ngIf="!loading">
+    Derzeit sind keine Statistiken verfügbar!
+  </div>
+</div>

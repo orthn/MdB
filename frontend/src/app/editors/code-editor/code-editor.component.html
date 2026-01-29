@@ -1,0 +1,5 @@
+<textarea
+  class="code-editor"
+  [value]="code"
+  (input)="codeChange.emit($any($event.target).value)">
+</textarea>

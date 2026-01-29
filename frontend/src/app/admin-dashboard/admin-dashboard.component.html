@@ -1,0 +1,131 @@
+<app-breadcrumb [breadcrumbs]="[
+  { label: 'Dashboard', url: '/dashboard'}
+]"></app-breadcrumb>
+
+<h2 class="text-white mb-4">Lehrer-Dashboard</h2>
+
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#students">
+      👤 Schüler
+    </button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#classes">
+      🏫 Klassen
+    </button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#codes">
+      🔑 Anmeldecodes
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <!-- Students tab -->
+  <div class="tab-pane fade show active" id="students">
+    <div class="d-flex justify-content-between mb-3">
+      <h5 class="text-white mb-4">Schüler</h5>
+      <button routerLink="/dashboard/createStudent" class="btn btn-success btn-sm">
+        <fa-icon [icon]="icons.PLUS"></fa-icon>
+        Schüler anlegen
+      </button>
+    </div>
+
+    <table class="table table-dark table-hover">
+      <thead>
+      <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Username</th>
+        <th>Aktionen</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.firstName }}</td>
+        <td>{{ student.lastName }}</td>
+        <td>{{ student.username }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" routerLink="/dashboard/editStudent/{{student._id}}">
+            <fa-icon [icon]="icons.PENCIL" class="me-1"></fa-icon>
+            ️Bearbeiten
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteStudent(student)">
+            <fa-icon [icon]="icons.TRASH" class="me-1"></fa-icon>
+            Löschen
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Classes tab -->
+  <div class="tab-pane fade" id="classes">
+    <div class="d-flex justify-content-between mb-3">
+      <h5 class="text-white mb-4">Klassen</h5>
+      <button routerLink="/dashboard/createClass" class="btn btn-success btn-sm">
+        <fa-icon [icon]="icons.PLUS"></fa-icon>
+        Klasse anlegen
+      </button>
+    </div>
+
+    <table class="table table-dark table-hover">
+      <thead>
+      <tr>
+        <th>Klassenname</th>
+        <th>Schüler</th>
+        <th>Aktionen</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of courses">
+        <td>{{ c.name }}</td>
+        <td>{{ c.students?.length }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" routerLink="/dashboard/editClass/{{c._id}}">
+            <fa-icon [icon]="icons.PENCIL" class="me-1"></fa-icon>
+            ️Bearbeiten
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteCourse(c)">
+            <fa-icon [icon]="icons.TRASH" class="me-1"></fa-icon>
+            Löschen
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Codes tab -->
+  <div class="tab-pane fade" id="codes">
+    <h5 class="text-white">Anmeldecodes verwalten</h5>
+    <table class="table table-dark table-hover">
+      <thead>
+      <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Username</th>
+        <th>Passwort</th>
+        <th>Aktionen</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.firstName }}</td>
+        <td>{{ student.lastName }}</td>
+        <td>{{ student.username }}</td>
+        <td>{{student.password}}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="resetPassword(student)" >
+            <fa-icon [icon]="icons.CALENDAR_PLUS" class="me-1"></fa-icon>
+            Erneuern
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

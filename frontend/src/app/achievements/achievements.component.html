@@ -1,0 +1,13 @@
+<app-breadcrumb [breadcrumbs]="[
+  { label: 'Belohnungen', url: '/achievements' },
+]"></app-breadcrumb>
+
+<div class="text-white">
+  <div *ngIf="loading" class="text-muted">
+    Lade Belohnungen...
+  </div>
+
+  <div *ngIf="!loading">
+    Derzeit sind keine Belohnungen verfügbar!
+  </div>
+</div>
