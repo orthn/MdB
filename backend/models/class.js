@@ -14,14 +14,12 @@ const classSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Student', // reference Student model
-            unique: true, // ensures each user appears only once in this array
         }
     ],
     teachers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Teacher',
-            unique: true,
         }
     ]
 });

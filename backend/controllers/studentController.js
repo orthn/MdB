@@ -1,4 +1,4 @@
-const Student = require('../models/student');
+const User = require('../models/user');
 const helpers = require("../services/helper");
 const jwt = require('jsonwebtoken');
 
@@ -14,18 +14,18 @@ const login = async (req, res) => {
             return res.status(400).json({message: 'username and password is required'});
         }
 
-        const student = await Student.findOne({username: username});
-        if (!student) {
+        const user = await User.findOne({username: username});
+        if (!user) {
             return res.status(401).json({message: 'Invalid username or password'});
         }
 
-        const isPasswordValid = student.password === password;
+        const isPasswordValid = user.password === password;
         if (!isPasswordValid) {
             return res.status(401).json({message: 'Invalid username or password'});
         }
 
-        const token = jwt.sign({userId: student._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES});
-        const {password: _, ...userWithoutPassword} = student.toObject();
+        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES});
+        const {password: _, ...userWithoutPassword} = user.toObject();
 
         return res.status(200).json({token, user: userWithoutPassword});
     } catch (error) {
@@ -35,10 +35,10 @@ const login = async (req, res) => {
 
 const createStudent = async (req, res) => {
     try {
-        const newStudent = new Student(req.body);
-        await newStudent.save();
+        const user = new User(req.body);
+        await user.save();
 
-        return res.status(201).json(newStudent);
+        return res.status(201).json(user);
     } catch (error) {
         return res.status(400).json({message: 'Failed to create student', error});
     }
@@ -58,7 +58,7 @@ const createMany = async (req, res) => {
         }
 
         // Use insertMany for efficiency
-        const createdStudents = await Student.insertMany(students, {ordered: false});
+        const createdStudents = await User.insertMany(students, {ordered: false});
 
         return res.status(201).json({
             message: `${createdStudents.length} student(s) created successfully`,
@@ -81,9 +81,9 @@ const resetPassword = async (req, res) => {
             return res.status(400).json({message: 'Missing student ID'});
         }
 
-        const student = await Student.findById({_id: id});
+        const student = await User.findById({_id: id});
         if (!student) {
-            return res.status(404).json({message: 'Student not found'});
+            return res.status(404).json({message: 'User not found'});
         }
 
         student.password = helpers.generateRandomPassword();
@@ -97,7 +97,7 @@ const resetPassword = async (req, res) => {
 
 const getStudents = async (req, res) => {
     try {
-        const students = await Student.find()
+        const students = await User.find({isTeacher: false});
         return res.status(200).json(students)
     } catch (error) {
         return res.status(400).send({message: 'Failed to retrieve students', error});
@@ -106,9 +106,9 @@ const getStudents = async (req, res) => {
 
 const getStudentById = async (req, res) => {
     try {
-        const student = await Student.findById({_id: req.params.id});
+        const student = await User.findById({_id: req.params.id});
         if (!student) {
-            return res.status(404).json({message: 'Student not found'});
+            return res.status(404).json({message: 'User not found'});
         }
 
         return res.status(200).json(student);
@@ -119,21 +119,78 @@ const getStudentById = async (req, res) => {
 
 const deleteStudent = async (req, res) => {
     try {
-        const { id } = req.params;
+        const {id} = req.params;
 
         // Using findByIdAndDelete for simplicity
-        const deletedStudent = await Student.findByIdAndDelete({_id: id});
+        const deletedStudent = await User.findByIdAndDelete({_id: id});
 
         if (!deletedStudent) {
-            return res.status(404).json({ message: 'Student not found' });
+            return res.status(404).json({message: 'User not found'});
         }
 
-        return  res.status(200).json({ message: 'Student deleted', student: deletedStudent });
+        return res.status(200).json({message: 'User deleted', student: deletedStudent});
     } catch (error) {
-        return res.status(400).json({ message: 'Failed to delete student', error });
+        return res.status(400).json({message: 'Failed to delete student', error});
+    }
+};
+
+const updateStudent = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            return res.status(400).json({message: 'Missing student ID'});
+        }
+
+        const student = await User.findById({_id: id});
+        if (!student) {
+            return res.status(404).json({message: 'User not found'});
+        }
+
+        const {firstName, lastName, gender, settings, absolvedLevels} = req.body;
+        if (firstName !== undefined) student.firstName = firstName;
+        if (lastName !== undefined) student.lastName = lastName;
+        if (gender !== undefined) student.gender = gender;
+        if (settings !== undefined) student.settings = settings;
+        if (absolvedLevels !== undefined) student.absolvedLevels = absolvedLevels;
+
+        await student.save();
+
+        return res.status(200).json({message: `Password of student "${student.username}" reset successfully`});
+    } catch (error) {
+        return res.status(500).json({message: 'Failed to reset password', error});
+    }
+}
+
+
+
+const getUserSettings = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            return res.status(400).json({message: 'Missing student ID'});
+        }
+
+        const user = await User.findById({_id: id}).select('settings');
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        res.json(user.settings);
+    } catch (err) {
+        res.status(400).json({message: 'Failed to load settings', err});
     }
 };
 
 module.exports = {
-    home, login, createStudent, createMany, getStudents, getStudentById, resetPassword, deleteStudent
+    home,
+    login,
+    createStudent,
+    createMany,
+    getStudents,
+    getStudentById,
+    resetPassword,
+    deleteStudent,
+    updateStudent,
+    getUserSettings,
 };

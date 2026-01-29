@@ -1,4 +1,5 @@
 const Class = require("../models/class");
+const Student = require("../models/user");
 
 const home = async (req, res) => {
     res.status(200).json({message: 'Welcome to classes!'});
@@ -78,9 +79,9 @@ const removeStudentFromClass = async (req, res) => {
 
 const createClass = async (req, res) => {
     try {
-        const {name, description} = req.body;
+        const {name, description, students} = req.body;
 
-        const draftClass = new Class({name: name, description: description, users: []});
+        const draftClass = new Class({name: name, description: description, students: [...new Set(students)]});
 
         const newClass = await draftClass.save();
         return res.status(201).json(newClass);
@@ -115,6 +116,32 @@ const getClassById = async (req, res) => {
     }
 }
 
+const updateClass = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            return res.status(400).json({message: 'Missing class ID'});
+        }
+
+        const course = await Class.findById({_id: id});
+        if (!course) {
+            return res.status(404).json({message: 'Student not found'});
+        }
+
+        const {name, description, students} = req.body;
+        if (name !== undefined) course.name = name;
+        if (description !== undefined) course.description = description;
+        if (students !== undefined) course.students = students;
+
+        await course.save();
+
+        res.status(200).json({message: `Class "${course.name}" updated successfully`});
+    } catch (error) {
+        res.status(500).json({message: 'Failed to update class', error});
+    }
+}
+
 module.exports = {
     home,
     createClass,
@@ -124,4 +151,5 @@ module.exports = {
     getClassById,
     deleteClass,
     removeStudentFromClass,
+    updateClass,
 }
