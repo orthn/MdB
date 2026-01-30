@@ -1,5 +1,3 @@
-import {UserSettings} from './UserSettings';
-
 export class User {
   _id?: string;
   firstName!: string;
@@ -9,7 +7,10 @@ export class User {
   gender!: 'male' | 'female';
   isLocked!: boolean;
   isTeacher!: boolean;
-
-  
   settings!: UserSettings;
+}
+
+export interface UserSettings {
+  showHints: boolean;
+  showAnimations: boolean;
 }

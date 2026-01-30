@@ -1,0 +1,70 @@
+.statistics-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+
+  .loading {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .no-stats {
+    text-align: center;
+    font-size: 1.1rem;
+    background: #333;
+    padding: 20px;
+    border-radius: 12px;
+    color: #ffcc00;
+  }
+
+  .stats-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .card {
+      background: #2d2d2d;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+
+      h3, h4 {
+        margin-bottom: 12px;
+        color: #ffeb3b;
+      }
+
+      p {
+        font-size: 1rem;
+        margin: 4px 0;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          background: #444;
+          padding: 8px 12px;
+          border-radius: 8px;
+          margin-bottom: 6px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 1rem;
+        }
+      }
+
+      .challenge-name {
+        font-weight: bold;
+        color: #4dd0e1;
+      }
+
+      .level-count {
+        font-weight: bold;
+        color: #ffb74d;
+      }
+    }
+  }
+}

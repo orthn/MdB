@@ -52,7 +52,6 @@ export class LevelComponent implements OnInit {
         this.userProgress.userId = this.user._id ?? ''
         this.userProgress.challengeId = this.level.challengeId
         this.userProgress.levelId = levelId
-        alert(JSON.stringify(level.starterBlocks));
         this.loading = false;
       },
       error: err => {

@@ -6,6 +6,7 @@ import {catchError, Observable, retry, throwError} from 'rxjs';
 import {Challenge} from '../models/Challenge';
 import {Level} from '../models/Level';
 import {UserProgress} from '../models/UserProgress';
+import {Statistics} from '../models/Statistics';
 
 
 @Injectable({
@@ -73,6 +74,10 @@ export class ApiService {
     return this.http.get<Challenge[]>(this.baseUrl + this.challenges);
   }
 
+  getChallengeById(id: string) {
+    return this.http.get<Challenge>(this.baseUrl + this.challenges + '/' + id);
+  }
+
   getLevelsOfChallenge(challengeId: string) {
     return this.http.get<Level[]>(this.baseUrl + this.challenges + '/' + challengeId + '/levels');
   }
@@ -87,6 +92,10 @@ export class ApiService {
 
   getCompletedLevels(id:string) {
     return this.http.get<UserProgress[]>(this.baseUrl + this.progress + '/' + id+ '/completed');
+  }
+
+  getUserStats(id: string) {
+    return this.http.get<Statistics>(this.baseUrl + this.progress + '/' + id+ '/stats');
   }
 
   updateUserProgress(progress: UserProgress) {

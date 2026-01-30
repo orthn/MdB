@@ -2,12 +2,38 @@
   { label: 'Statistiken', url: '/statistics' },
 ]"></app-breadcrumb>
 
-<div class="text-white">
-  <div *ngIf="loading" class="text-muted">
-    Lade Statistiken...
+<div class="statistics-container text-white">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading text-muted">
+    Lade deine Statistiken...
   </div>
 
-  <div *ngIf="!loading">
-    Derzeit sind keine Statistiken verfügbar!
+  <!-- No stats yet -->
+  <div *ngIf="!loading && stats.totalCompletedLevels && stats.totalCompletedLevels === 0" class="no-stats">
+    😔 Du hast noch kein Level gespielt! Starte ein Level, um deine Fortschritte zu sehen.
+  </div>
+
+  <!-- Stats -->
+  <div *ngIf="!loading && stats.totalCompletedLevels && stats.totalCompletedLevels > 0" class="stats-cards">
+
+    <!-- Summary card -->
+    <div class="card summary-card">
+      <h3>🎉 Deine Fortschritte</h3>
+      <p>✅ Abgeschlossene Level: <strong>{{ stats.totalCompletedLevels }}</strong></p>
+      <p>📝 Gesamtversuche: <strong>{{ stats.totalAttempts }}</strong></p>
+    </div>
+
+    <!-- Levels per challenge -->
+    <div class="card challenge-card">
+      <h4>🏆 Abgeschlossene Level pro Challenge</h4>
+      <ul>
+        <li *ngFor="let challenge of stats.levelsPerChallenge | keyvalue">
+          <span class="challenge-name">{{ challenge.key }}</span>
+          <span class="level-count">{{ challenge.value }} Level abgeschlossen</span>
+        </li>
+      </ul>
+    </div>
+
   </div>
 </div>
