@@ -12,8 +12,8 @@
     <div *ngFor="let challenge of challenges; let ci = index" class="challenge mb-5">
       <!-- Challenge header -->
       <div class="challenge-header" [style.--i]="getGlobalIndex(ci)">
-        <h4 class="text-white mb-1">{{ challenge.title }}</h4>
-        <p class="text-muted mb-4">{{ challenge.description }}</p>
+        <h2 class="title mb-1">{{ challenge.title }}</h2>
+        <p class="description mb-4">{{ challenge.description }}</p>
       </div>
 
       <!-- Path -->
@@ -39,10 +39,16 @@
 
           <!-- Info -->
           <div class="level-info">
-            <div class="title">{{ level.title }}</div>
-            <div class="mode">
-              <span *ngIf="level.mode === 'blocks'">🟦 Blocks</span>
-              <span *ngIf="level.mode === 'code'">💻 Code</span>
+            <div class="title-row">
+              <div class="title">{{ level.title }}</div>
+                <span class="mode-badge" [ngClass]="level.mode">
+                  <ng-container *ngIf="level.mode === 'code'">
+                    <fa-icon [icon]="icons.CODE"></fa-icon>
+                  </ng-container>
+                  <ng-container *ngIf="level.mode === 'blocks'">
+                    <fa-icon [icon]="icons.PUZZLE"></fa-icon>
+                  </ng-container>
+                </span>
             </div>
           </div>
         </div>

@@ -52,7 +52,7 @@ export class LevelComponent implements OnInit {
         this.userProgress.userId = this.user._id ?? ''
         this.userProgress.challengeId = this.level.challengeId
         this.userProgress.levelId = levelId
-
+        alert(JSON.stringify(level.starterBlocks));
         this.loading = false;
       },
       error: err => {
@@ -77,35 +77,43 @@ export class LevelComponent implements OnInit {
     this.submitting = true;
     this.feedback = null;
 
-    const normalizedUser = this.normalize(this.userCode);
+    // Normalize user input
+    const normalizedCode: string = this.normalize(this.userCode.trim());
 
-    const matchedSolution = this.level.solutions.find(
-      s =>
-        s.mode === 'code' &&
-        this.normalize(s.code) === normalizedUser
-    );
+    // Find matching solution for the current mode
+    const matchedSolution = this.level.solutions.find(s => {
+      if (s.mode !== this.level.mode) return false;
+      return this.normalize(s.code) === normalizedCode;
+    });
 
     if (matchedSolution?.isCorrect) {
-      //TODO: UPDATE USERPROGRESS
+      // Update user progress
       this.api.updateUserProgress(this.userProgress).subscribe({
         next: progress => {
           this.celebrate();
-          this.toast.show('Level abgeschlossen 🎉', 'success');
+          this.feedback = matchedSolution.feedback ?? 'Super! Level abgeschlossen 🎉';
+          this.toast.show(this.feedback, 'success');
+
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, this.animationDuration);
+        },
+        error: err => {
+          this.toast.show('Fehler beim Speichern des Fortschritts', 'error');
         }
-      })
-
-      setTimeout(() => {
-        this.router.navigate(['/home']);
-      }, this.animationDuration);
-
+      });
     } else if (matchedSolution) {
-      // matched a wrong solution → show its explanation
-      this.toast.show(matchedSolution.explanation ?? 'Ohje, das war leider nicht richtig. Versuch es nochmal!', 'error');
+      // Show its explanation/feedback
+      this.feedback = matchedSolution.feedback ?? matchedSolution.explanation ?? 'Ohje, das war leider nicht richtig. Versuch es nochmal!';
+      this.toast.show(this.feedback, 'error');
     } else {
-      // fallback
-      this.toast.show('Ohje, das war leider nicht richtig. Versuch es nochmal!', 'error');
-    }
+      // If no match, display generic error
+      this.feedback = this.level.mode === 'blocks'
+        ? 'Achte auf die Reigenfolge!'
+        :'Ohje, das war leider nicht richtig. Versuch es nochmal!'
 
+      this.toast.show(this.feedback, 'error');
+    }
     this.submitting = false;
   }
 

@@ -1,4 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 
 export const ICON_PROPS: { [key: string]: IconProp } = {
   TROPHY: ['fas', 'trophy'],
@@ -8,9 +10,6 @@ export const ICON_PROPS: { [key: string]: IconProp } = {
   INFO_CIRCLE: ['fas', 'info-circle'],
   ROAD: ['fas', 'road'],
   TOILET: ['fas', 'toilet'],
-  COMPUTER: ['fas', 'desktop'],        // computer / PC
-  BRICK: ['fas', 'cubes'],        // brick / masonry
-  HYBRID: ['fas', 'shuffle'],          // hybrid / mixed / combination
   SHOWER: ['fas', 'shower'],
   MEDAL: ['fas', 'medal'],
   BAG_SHOPPING: ['fas', 'bag-shopping'],
@@ -54,9 +53,8 @@ export const ICON_PROPS: { [key: string]: IconProp } = {
 };
 
 export const ICONS = {
-  COMPUTER: ICON_PROPS['COMPUTER'],
-  BRICK: ICON_PROPS['BRICK'],
-  HYBRID: ICON_PROPS['HYBRID'],
+  CODE: faCode,
+  PUZZLE: faPuzzlePiece,
   TROPHY: ICON_PROPS['TROPHY'],
   PERSON_RUNNING: ICON_PROPS['PERSON_RUNNING'],
   HEART: ICON_PROPS['HEART'],

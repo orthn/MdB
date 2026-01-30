@@ -80,6 +80,22 @@ const seed = async (req, res) => {
                 challengeId: variables._id,
                 title: 'Meine erste Variable',
                 description: 'Speichere die Ziffer 3 in Variable x',
+                mode: 'blocks',
+                starterBlocks: [
+                    'int ', 'x ', '= ', '3', ';'
+                ],
+                hints: [{text: 'Vergiss nicht, am Ende `;` einzufügen', order: 1}],
+                solutions: [
+                    {mode: 'blocks', code: 'int x = 3;', isCorrect: true, feedback: 'Das hast du super gelöst!'},
+                ],
+                order: 1,
+                difficulty: 'easy',
+                isActive: true
+            },
+            {
+                challengeId: variables._id,
+                title: 'Meine erste Variable',
+                description: 'Speichere die Ziffer 3 in Variable x',
                 mode: 'code',
                 starterCode: 'int x = ',
                 hints: [{text: 'Vergiss nicht, am Ende `;` einzufügen', order: 1}],

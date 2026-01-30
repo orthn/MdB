@@ -1,1 +1,7 @@
-<p>block-editor works!</p>
+<div class="block-editor">
+  <div cdkDropList class="block-list" (cdkDropListDropped)="drop($event)">
+    <div class="block" *ngFor="let block of blocks" cdkDrag >
+      {{ block }}
+    </div>
+  </div>
+</div>

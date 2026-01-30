@@ -1,0 +1,30 @@
+.block-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.block-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 2px dashed #0d6efd;
+  border-radius: 8px;
+  min-height: 120px; // ensures visible area
+  background: #1f2933;
+}
+
+.block {
+  background: #2d8cff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: grab;
+  font-family: monospace;
+}
+
+.block:active {
+  cursor: grabbing;
+}

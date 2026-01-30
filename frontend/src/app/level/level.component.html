@@ -10,15 +10,20 @@
 <div *ngIf="!loading && level" class="level-layout text-white">
   <!-- HEADER -->
   <section class="level-header">
-    <h2>{{ level.title }}</h2>
+    <div class="header-main">
+      <div class="header-text">
+        <h2 class="title">{{ level.title }}</h2>
+        <p class="description">
+          Deine Aufgabe: {{ level.description }}
+        </p>
+      </div>
 
-    <span class="difficulty" [ngClass]="level.difficulty">
-      {{ level.difficulty | uppercase }}
-    </span>
-
-    <p class="description">
-      Deine Aufgabe: {{ level.description }}
-    </p>
+      <span class="difficulty" [ngClass]="level.difficulty">
+        <ng-container *ngIf="level.difficulty === 'easy'">LEICHT</ng-container>
+        <ng-container *ngIf="level.difficulty === 'medium'">NORMAL</ng-container>
+        <ng-container *ngIf="level.difficulty === 'hard'">SCHWER</ng-container>
+      </span>
+    </div>
   </section>
 
   <!-- WORK AREA -->
@@ -31,11 +36,12 @@
       (codeChange)="userCode = $event">
     </app-code-editor>
 
-    <!-- BLOCKS
+    <!-- BLOCKS -->
     <app-block-editor
       *ngIf="level.mode === 'blocks'"
-      (blocksChange)="userCode = $event">
-    </app-block-editor>-->
+      [blocks]="level.starterBlocks ?? []"
+      (codeChange)="userCode = $event">
+    </app-block-editor>
 
   </section>
 
@@ -52,11 +58,6 @@
         {{ level.hints![i].text }}
       </div>
     </div>
-
-    <div *ngIf="feedback" class="feedback error">
-      {{ feedback }}
-    </div>
-
   </section>
 
   <!-- ACTION BAR -->

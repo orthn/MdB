@@ -22,15 +22,6 @@
   background: #6c757d;
 }
 
-.connector {
-  background: #6c757d;
-}
-
-.path-node.completed .connector,
-.connector.active {
-  background: #2ecc71;
-}
-
 .level-node.locked {
   background: #555;
   cursor: not-allowed;
@@ -79,6 +70,11 @@
   background: #0d6efd; // blue (active path)
 }
 
+.path-node.completed .connector,
+.connector.active {
+  background: #2ecc71;
+}
+
 .level-circle {
   width: 48px;
   height: 48px;
@@ -110,6 +106,65 @@
   color: #adb5bd;
 }
 
+.level-info .mode {
+  margin-top: 4px;
+}
+
+/* Base badge */
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* Blocks */
+.mode-badge.blocks {
+  background: rgba(13, 110, 253, 0.15);
+  color: #6ea8fe;
+  border: 1px solid rgba(13, 110, 253, 0.35);
+}
+
+/* Code */
+.mode-badge.code {
+  background: rgba(111, 66, 193, 0.15);
+  color: #c29ffa;
+  border: 1px solid rgba(111, 66, 193, 0.35);
+}
+
+/* Hybrid */
+.mode-badge.both {
+  background: linear-gradient(
+      90deg,
+      rgba(13, 110, 253, 0.25),
+      rgba(111, 66, 193, 0.25)
+  );
+  color: #e2d9ff;
+  border: 1px solid rgba(160, 120, 255, 0.45);
+}
+.level-info {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title + mode on one line */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-info .title {
+  color: white;
+  font-weight: 600;
+  line-height: 1.2;
+}
 
 .path-node.completed .level-circle {
   background: #2ecc71;
@@ -121,6 +176,17 @@
   animation: pulse 0.8s infinite;
 }
 
+.difficulty {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.difficulty.easy { background: #198754; }
+.difficulty.medium { background: #ffc107; color: #000; }
+.difficulty.hard { background: #dc3545; }
+
 .challenge-header {
   opacity: 0;
   transform: translateY(-12px);
@@ -128,8 +194,16 @@
   animation-delay: calc(var(--i) * 0.25s);
 }
 
-.challenge-header h4 {
-  letter-spacing: 0.3px;
+.title {
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.description {
+  margin: 6px 0 0;
+  color: #adb5bd;
+  font-size: 0.95rem;
 }
 
 @keyframes pulse {

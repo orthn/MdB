@@ -8,4 +8,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class CodeEditorComponent {
   @Input() code = '';
   @Output() codeChange = new EventEmitter<string>();
+
+  onInput(value: string) {
+    this.codeChange.emit(value);
+  }
 }

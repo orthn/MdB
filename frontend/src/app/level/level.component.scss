@@ -11,16 +11,63 @@
   border-radius: 12px;
 }
 
-.difficulty {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
+/* Main horizontal layout */
+.header-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.difficulty.easy { background: #198754; }
-.difficulty.medium { background: #ffc107; color: #000; }
-.difficulty.hard { background: #dc3545; }
+/* Left column */
+.header-text {
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.description {
+  margin: 6px 0 0;
+  color: #adb5bd;
+  font-size: 0.95rem;
+}
+
+/* Difficulty badge */
+.difficulty {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+/* Difficulty colors */
+.difficulty.easy {
+  background: #2ecc71;
+  color: #0b3d1e;
+}
+
+.difficulty.medium {
+  background: #f1c40f;
+  color: #3a2f00;
+}
+
+.difficulty.hard {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
 .level-work {
   background: #111827;
