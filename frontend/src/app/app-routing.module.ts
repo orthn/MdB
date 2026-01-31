@@ -12,6 +12,7 @@ import {AchievementsComponent} from './achievements/achievements.component';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {SettingsComponent} from './settings/settings.component';
 import {LevelComponent} from './level/level.component';
+import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -27,6 +28,7 @@ const routes: Routes = [
   {path: 'statistics', component: StatisticsComponent},
   {path: 'settings', component: SettingsComponent},
   {path: 'level/:id', component: LevelComponent},
+  {path: 'leaderboard', component: LeaderboardComponent},
   {path: '**', redirectTo: ''}
 ];
 

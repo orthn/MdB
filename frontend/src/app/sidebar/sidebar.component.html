@@ -38,6 +38,12 @@
             Statistiken
           </a>
         </li>
+        <li class="nav-item mb-2" *ngIf="!userService.isTeacher()">
+          <a routerLink="/leaderboard" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.TROPHY" class="me-2"></fa-icon>
+            Bestenlisten
+          </a>
+        </li>
         <li class="nav-item mb-2" *ngIf="userService.isTeacher()">
           <a routerLink="/dashboard" routerLinkActive="active" class="nav-link text-white">
             <fa-icon [icon]="icons.USER" class="me-2"></fa-icon>

@@ -1,10 +1,18 @@
 const express = require('express');
-const {home, getStudents, getStudentById, createStudent, resetPassword, login, createMany, deleteStudent, updateStudent,
-    getUserSettings, updateProgress
-} = require("../controllers/studentController");
 const router = express.Router();
 
-router.get('/', home);
+const {
+    getStudents,
+    getStudentById,
+    createStudent,
+    resetPassword,
+    login,
+    createMany,
+    deleteStudent,
+    updateUser,
+    getUserSettings
+} = require("../controllers/studentController");
+
 router.get('/getAll', getStudents);
 router.get('/:id', getStudentById)
 router.get('/:id/settings', getUserSettings)
@@ -28,7 +36,7 @@ router.post('/create', createStudent);
 router.post('/create-many', createMany);
 router.post('/login', login);
 
-router.put('/:id/update', updateStudent);
+router.put('/:id/update', updateUser);
 router.put('/:id/reset-password', resetPassword);
 
 router.delete('/:id', deleteStudent);

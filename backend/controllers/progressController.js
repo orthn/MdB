@@ -1,5 +1,6 @@
 const UserProgress = require('../models/userProgress');
 const Challenge = require("../models/challenge");
+const Level = require("../models/level");
 
 const updateProgress = async (req, res) => {
     try {
@@ -46,37 +47,72 @@ const getMyProgress = async (req, res) => {
 const getMyStatistics = async (req, res) => {
     try {
         const {id} = req.params;
+
         if (!id) {
             return res.status(400).json({message: 'Missing ID'});
         }
 
-        // total levels completed
-        const completedLevels = await UserProgress.find({userId: id, completed: true});
+        // get completed progress
+        const completedLevels = await UserProgress.find({
+            userId: id,
+            completed: true
+        });
 
         // total attempts
-        const totalAttempts = completedLevels.reduce((acc, p) => acc + (p.attempts || 0), 0);
+        const totalCompletedLevels = completedLevels.length;
+        const totalAttempts = completedLevels.reduce(
+            (acc, p) => acc + (p.attempts || 0), 0
+        );
 
-        const levelsPerChallengeMap = {};
+        // count completed per challenge
+        const completedMap = {};
         completedLevels.forEach(p => {
-            levelsPerChallengeMap[p.challengeId] = (levelsPerChallengeMap[p.challengeId] || 0) + 1;
+            const key = p.challengeId.toString();
+            completedMap[key] = (completedMap[key] || 0) + 1;
         });
 
-        // levels per challenge
-        const challengeIds = Object.keys(levelsPerChallengeMap);
-        const challenges = await Challenge.find({_id: {$in: challengeIds}}).select('title');
+        // get ALL active challenges
+        const challenges = await Challenge.find({ isActive: true })
+            .select('_id title order')
+            .sort({ order: 1 });
+
+        // get level totals using aggregation (FAST)
+        const totals = await Level.aggregate([
+            {
+                $group: {
+                    _id: "$challengeId",
+                    total: {$sum: 1}
+                }
+            }
+        ]);
+
+        const totalMap = {};
+        totals.forEach(t => {
+            totalMap[t._id.toString()] = t.total;
+        });
+
         const levelsPerChallenge = {};
+
         challenges.forEach(c => {
             const idStr = c._id.toString();
-            levelsPerChallenge[c.title] = levelsPerChallengeMap[idStr];
+
+            levelsPerChallenge[c.title] = {
+                completed: completedMap[idStr] || 0,
+                total: totalMap[idStr] || 0
+            };
         });
 
-        res.status(200).json({
-            totalCompletedLevels: completedLevels.length,
-            totalAttempts: totalAttempts,
-            levelsPerChallenge: levelsPerChallenge,
+        return res.status(200).json({
+            totalCompletedLevels,
+            totalAttempts,
+            levelsPerChallenge
         });
+
     } catch (error) {
-        return res.status(200).json({message: 'Failed to load statistics', error});
+        return res.status(500).json({
+            message: 'Failed to load statistics',
+            error
+        });
     }
 }
 

@@ -2,10 +2,6 @@ const User = require('../models/user');
 const helpers = require("../services/helper");
 const jwt = require('jsonwebtoken');
 
-const home = async (req, res) => {
-    return res.status(200).json({message: 'Welcome to students!'});
-}
-
 const login = async (req, res) => {
     try {
         const {username, password} = req.body;
@@ -134,7 +130,7 @@ const deleteStudent = async (req, res) => {
     }
 };
 
-const updateStudent = async (req, res) => {
+const updateUser = async (req, res) => {
     try {
         const id = req.params.id;
 
@@ -183,7 +179,6 @@ const getUserSettings = async (req, res) => {
 };
 
 module.exports = {
-    home,
     login,
     createStudent,
     createMany,
@@ -191,6 +186,6 @@ module.exports = {
     getStudentById,
     resetPassword,
     deleteStudent,
-    updateStudent,
+    updateUser,
     getUserSettings,
 };

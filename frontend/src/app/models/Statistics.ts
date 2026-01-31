@@ -1,5 +1,10 @@
 export class Statistics {
   totalCompletedLevels?: number;
   totalAttempts?: number;
-  levelsPerChallenge?: { [challengeId: string]: number };
+  levelsPerChallenge?: {
+    [challengeTitle: string]: {
+      completed: number;
+      total: number
+    }
+  };
 }

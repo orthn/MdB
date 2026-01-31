@@ -25,6 +25,7 @@ import {SettingsComponent} from './settings/settings.component';
 import {LevelComponent} from './level/level.component';
 import {CodeEditorComponent} from "./editors/code-editor/code-editor.component";
 import {BlockEditorComponent} from './editors/block-editor/block-editor.component';
+import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {BlockEditorComponent} from './editors/block-editor/block-editor.componen
     SettingsComponent,
     LevelComponent,
     NavbarComponent,
+    LeaderboardComponent,
     BreadcrumbComponent,
   ],
   imports: [

@@ -3,36 +3,82 @@
 ]"></app-breadcrumb>
 
 <div class="statistics-container text-white">
+  <h2 class="title">📊 Deine Statistiken</h2>
 
   <!-- Loading -->
-  <div *ngIf="loading" class="loading text-muted">
+  <div *ngIf="loading" class="loading">
     Lade deine Statistiken...
   </div>
 
-  <!-- No stats yet -->
-  <div *ngIf="!loading && stats.totalCompletedLevels && stats.totalCompletedLevels === 0" class="no-stats">
-    😔 Du hast noch kein Level gespielt! Starte ein Level, um deine Fortschritte zu sehen.
+  <!-- Empty -->
+  <div *ngIf="!loading && stats.totalCompletedLevels === 0" class="empty-card">
+    😔 Du hast noch kein Level gespielt!
+    <br>
+    Starte ein Level und erklimme die Bestenliste!
   </div>
 
-  <!-- Stats -->
-  <div *ngIf="!loading && stats.totalCompletedLevels && stats.totalCompletedLevels > 0" class="stats-cards">
+  <!-- PLAYER SUMMARY -->
+  <div *ngIf="!loading && stats.totalCompletedLevels && stats.totalCompletedLevels > 0" class="summary-card">
+    <div class="trophy">🏆</div>
 
-    <!-- Summary card -->
-    <div class="card summary-card">
-      <h3>🎉 Deine Fortschritte</h3>
-      <p>✅ Abgeschlossene Level: <strong>{{ stats.totalCompletedLevels }}</strong></p>
-      <p>📝 Gesamtversuche: <strong>{{ stats.totalAttempts }}</strong></p>
+    <div>
+      <div class="big-number">
+        {{ stats.totalCompletedLevels }}
+      </div>
+
+      <div class="subtitle">
+        Level abgeschlossen
+      </div>
+    </div>
+  </div>
+
+
+  <!-- STAT GRID -->
+  <div class="stats-grid" *ngIf="stats.totalCompletedLevels! > 0">
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-value">{{ stats.totalAttempts }}</div>
+      <div class="stat-label">Versuche</div>
     </div>
 
-    <!-- Levels per challenge -->
-    <div class="card challenge-card">
-      <h4>🏆 Abgeschlossene Level pro Challenge</h4>
-      <ul>
-        <li *ngFor="let challenge of stats.levelsPerChallenge | keyvalue">
-          <span class="challenge-name">{{ challenge.key }}</span>
-          <span class="level-count">{{ challenge.value }} Level abgeschlossen</span>
-        </li>
-      </ul>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-value">
+        {{ stats.totalAttempts! / stats.totalCompletedLevels! | number:'1.0-1' }}
+      </div>
+      <div class="stat-label">Ø Versuche / Level</div>
+    </div>
+  </div>
+
+
+  <!-- CHALLENGES -->
+  <div class="challenge-section"
+       *ngIf="stats.totalCompletedLevels! > 0">
+
+    <h3>🏅 Challenges</h3>
+
+    <div class="challenge-row"
+         *ngFor="let challenge of stats.levelsPerChallenge | keyvalue">
+
+      <!-- Challenge Name -->
+      <span class="challenge-name">
+      {{ challenge.key }}
+    </span>
+
+      <!-- Progress Bar -->
+      <div class="bar">
+        <div class="fill"
+             [style.width.%]="
+             (challenge.value.completed / challenge.value.total) * 100
+           ">
+        </div>
+      </div>
+
+      <!-- Completed / Total -->
+      <span class="challenge-count">
+      {{ challenge.value.completed }} / {{ challenge.value.total }}
+    </span>
+
     </div>
 
   </div>

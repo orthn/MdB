@@ -7,6 +7,7 @@ import {Challenge} from '../models/Challenge';
 import {Level} from '../models/Level';
 import {UserProgress} from '../models/UserProgress';
 import {Statistics} from '../models/Statistics';
+import {LeaderboardEntry} from '../models/LeaderboardEntry';
 
 
 @Injectable({
@@ -18,6 +19,7 @@ export class ApiService {
   private classes: string = '/classes'
   private challenges: string = '/challenges';
   private progress: string = '/progress';
+  private leaderboard: string = '/leaderboard';
 
   constructor(private http: HttpClient) {}
 
@@ -100,6 +102,10 @@ export class ApiService {
 
   updateUserProgress(progress: UserProgress) {
     return this.http.put(this.baseUrl + this.progress + '/' + progress.userId, progress);
+  }
+
+  getLeaderboard(): Observable<LeaderboardEntry[]> {
+    return this.http.get<LeaderboardEntry[]>(this.baseUrl + this.leaderboard);
   }
 
   private handleError(error: HttpErrorResponse) {

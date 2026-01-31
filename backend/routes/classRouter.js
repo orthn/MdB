@@ -4,7 +4,7 @@ const {
     home, createClass, getUsersOfClass, addStudentToClass, getClassById, deleteClass, getClasses, removeStudentFromClass,
     updateClass
 } = require('../controllers/classController');
-const {updateStudent} = require("../controllers/studentController");
+const {updateUser} = require("../controllers/studentController");
 
 router.get('/', home);
 router.get('/getAll', getClasses);
