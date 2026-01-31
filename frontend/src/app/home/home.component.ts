@@ -69,6 +69,10 @@ export class HomeComponent implements OnInit {
           this.applyProgressToLevels();
           this.loading = false;
         });
+      },
+      error: err => {
+        this.toast.show('Challenges konnten nicht geladen werden', 'error')
+        this.loading = false
       }
     });
   }
