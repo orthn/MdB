@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {UserSettings} from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -64,5 +65,18 @@ export class UserService {
     } else {
       document.body.classList.remove('no-animations');
     }
+  }
+
+  applySettings(settings: UserSettings): void {
+    const user = this.getUser()
+    user.settings.showAnimations = settings?.showAnimations ?? true;
+    user.settings.showHints = settings?.showHints ?? true;
+
+    if (user.settings.showAnimations) {
+      document.body.classList.remove('no-animations');
+    } else {
+      document.body.classList.add('no-animations');
+    }
+    this.setUser(user);
   }
 }

@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit {
         if (response.token) {
           this.toast.show("Login erfolgreich!", "success");
           this.userService.setUser(response.user);
+          this.userService.applySettings(response.user.settings);
           this.userService.saveToken(response.token);
 
           if (this.userService.getUser().isTeacher) {

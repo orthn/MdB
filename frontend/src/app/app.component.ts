@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const user = this.userService.getUser()
     if (user?.settings) {
-      this.userService.applyAnimationPreference(user.settings.showAnimations)
+      this.userService.applySettings(user.settings)
     }
   }
 

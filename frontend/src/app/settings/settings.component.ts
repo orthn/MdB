@@ -46,7 +46,7 @@ export class SettingsComponent implements OnInit {
     this.saving = true;
     this.api.updateUser(this.user).subscribe({
       next: () => {
-        this.userService.applyAnimationPreference(this.user.settings.showAnimations)
+        this.userService.applySettings(this.user.settings)
         this.toast.show('Einstellungen gespeichert', 'success');
         this.saving = false;
       },
