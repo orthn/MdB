@@ -44,16 +44,12 @@ export class SettingsComponent implements OnInit {
 
   save(): void {
     this.saving = true;
+    alert(JSON.stringify(this.user));
     this.api.updateUser(this.user).subscribe({
       next: () => {
         this.toast.show('Einstellungen gespeichert', 'success');
+        this.userService.applyAnimationPreference(this.user.settings.showAnimations)
         this.saving = false;
-
-        if (!this.user.settings.showAnimations) {
-          document.body.classList.add('no-animations');
-        } else {
-          document.body.classList.remove('no-animations');
-        }
       },
       error: () => {
         this.toast.show('Speichern fehlgeschlagen', 'error');

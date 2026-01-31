@@ -7,7 +7,8 @@ export class UserService {
   private userKey = 'currentUser';
   private jwtToken = 'jwtToken';
 
-  constructor() {}
+  constructor() {
+  }
 
   setUser(user: any): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
@@ -54,5 +55,14 @@ export class UserService {
   logout(): void {
     this.clearUser();
     this.removeToken();
+  }
+
+  applyAnimationPreference(showAnimations: boolean) {
+    this.getUser().settings.showAnimations = showAnimations;
+    if (!showAnimations) {
+      document.body.classList.add('no-animations');
+    } else {
+      document.body.classList.remove('no-animations');
+    }
   }
 }

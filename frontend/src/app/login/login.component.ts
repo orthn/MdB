@@ -58,10 +58,10 @@ export class LoginComponent implements OnInit {
           this.toast.show("Login erfolgreich!", "success");
           this.userService.setUser(response.user);
           this.userService.saveToken(response.token);
+
           if (this.userService.getUser().isTeacher) {
             this.router.navigate(['/dashboard']);
           } else this.router.navigate(['/home']);
-
         }
       },
       error: (error) => {
