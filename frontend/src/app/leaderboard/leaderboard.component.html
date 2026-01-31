@@ -1,0 +1,44 @@
+<app-breadcrumb [breadcrumbs]="[
+  { label: 'Bestenliste', url: '/leaderboard' }
+]"></app-breadcrumb>
+
+<div class="leaderboard-container text-white">
+  <h2 class="title">🏆 Bestenliste</h2>
+
+  <!-- PODIUM -->
+  <div class="podium" *ngIf="leaderboard.length >= 3">
+
+    <!-- SECOND -->
+    <div class="podium-card second">
+      <div class="medal">🥈</div>
+      <div class="name">{{ leaderboard[1].username }}</div>
+      <div class="score">{{ leaderboard[1].completedLevels }} Level</div>
+    </div>
+
+    <!-- FIRST -->
+    <div class="podium-card first">
+      <div class="medal big">🥇</div>
+      <div class="name">{{ leaderboard[0].username }}</div>
+      <div class="score">{{ leaderboard[0].completedLevels }} Level</div>
+    </div>
+
+    <!-- THIRD -->
+    <div class="podium-card third">
+      <div class="medal">🥉</div>
+      <div class="name">{{ leaderboard[2].username }}</div>
+      <div class="score">{{ leaderboard[2].completedLevels }} Level</div>
+    </div>
+
+  </div>
+
+  <!-- REST -->
+  <div class="rest">
+    <div
+      class="row"
+      *ngFor="let player of leaderboard.slice(3); let i = index">
+      <span class="rank">#{{ i + 4 }}</span>
+      <span class="username">{{ player.username }}</span>
+      <span class="levels">{{ player.completedLevels }} ⭐</span>
+    </div>
+  </div>
+</div>
