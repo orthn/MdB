@@ -6,7 +6,6 @@ const {updateProgress, getMyProgress, getMyStatistics, getCompletedLevels} = req
 router.get('/:id', getMyProgress)
 router.get('/:id/stats', getMyStatistics)
 router.get('/:id/completed', getCompletedLevels)
-
 router.put('/:id', updateProgress);
 
 module.exports = router;

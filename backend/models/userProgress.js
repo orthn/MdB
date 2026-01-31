@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userProgressSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true, index: true
+        type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true
     },
 
     challengeId: {

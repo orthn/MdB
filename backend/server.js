@@ -7,6 +7,8 @@ const classes = require('./routes/classRouter');
 const students = require('./routes/studentRouter');
 const challenges = require('./routes/challengesRouter');
 const progress = require('./routes/progressRouter');
+const leaderboard = require('./routes/leaderboardRouter');
+const seed = require('./routes/seedRouter');
 const helpers = require("./services/helper");
 
 const bodyParser = require("express");
@@ -48,9 +50,11 @@ app.get('/test', (req, res) => {
     res.send(pwd);
 })
 
+app.use('/seed', seed);
 app.use('/users', students);
 app.use('/students', students);
 app.use('/progress', progress);
 app.use('/classes', classes);
+app.use('/leaderboard', leaderboard);
 app.use('/challenges', challenges);
 
