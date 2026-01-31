@@ -89,7 +89,7 @@ export class LevelComponent implements OnInit {
       this.api.updateUserProgress(this.userProgress).subscribe({
         next: progress => {
           alert(JSON.stringify(this.user.settings));
-          if (this.user.settings.showAnimations) {this.celebrate()}
+          this.celebrate()
           this.feedback = matchedSolution.feedback ?? 'Super! Level abgeschlossen 🎉';
           this.toast.show(this.feedback, 'success');
 

@@ -44,11 +44,10 @@ export class SettingsComponent implements OnInit {
 
   save(): void {
     this.saving = true;
-    alert(JSON.stringify(this.user));
     this.api.updateUser(this.user).subscribe({
       next: () => {
-        this.toast.show('Einstellungen gespeichert', 'success');
         this.userService.applyAnimationPreference(this.user.settings.showAnimations)
+        this.toast.show('Einstellungen gespeichert', 'success');
         this.saving = false;
       },
       error: () => {
