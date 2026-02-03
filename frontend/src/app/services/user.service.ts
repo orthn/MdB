@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {UserSettings} from '../models/User';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +9,7 @@ export class UserService {
   private userKey = 'currentUser';
   private jwtToken = 'jwtToken';
 
-  constructor() {
-  }
+  constructor(private router: Router) {}
 
   setUser(user: any): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
@@ -58,15 +58,6 @@ export class UserService {
     this.removeToken();
   }
 
-  applyAnimationPreference(showAnimations: boolean) {
-    this.getUser().settings.showAnimations = showAnimations;
-    if (!showAnimations) {
-      document.body.classList.add('no-animations');
-    } else {
-      document.body.classList.remove('no-animations');
-    }
-  }
-
   applySettings(settings: UserSettings): void {
     const user = this.getUser()
     user.settings.showAnimations = settings?.showAnimations ?? true;
@@ -78,5 +69,14 @@ export class UserService {
       document.body.classList.add('no-animations');
     }
     this.setUser(user);
+  }
+
+  public checkIfUserIsAllowedAndReroute() {
+    if (!this.getUser().isLoggedIn()) {
+      this.router.navigate(['/login']);
+    }
+    if (this.getUser().isTeacher()) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

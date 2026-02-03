@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {LeaderboardEntry} from '../models/LeaderboardEntry';
 import {ApiService} from '../services/api.service';
+import {UserService} from '../services/user.service';
 import {ToastService} from '../services/toast.service';
+import {Router} from '@angular/router';
+import {User} from '../models/User';
 
 @Component({
   selector: 'app-leaderboard',
@@ -17,13 +20,19 @@ export class LeaderboardComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private toast: ToastService,
-  ) {
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastService) {
   }
 
   ngOnInit(): void {
+    //this.userService.checkIfUserIsAllowedAndReroute()
+    this.loadLeaderboard()
+  }
+
+  private loadLeaderboard(): void {
     this.api.getLeaderboard().subscribe({
-      next: (leaderboard) => {
+      next: (leaderboard: LeaderboardEntry[]) => {
         this.leaderboard = leaderboard;
         this.loading = false;
       },
@@ -33,5 +42,4 @@ export class LeaderboardComponent implements OnInit {
       }
     })
   }
-
 }

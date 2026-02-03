@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../services/user.service';
 import {ApiService} from '../services/api.service';
 import {Router} from '@angular/router';
+import {ToastService} from '../services/toast.service';
 
 @Component({
   selector: 'app-achievements',
@@ -10,13 +11,29 @@ import {Router} from '@angular/router';
   styleUrl: './achievements.component.scss'
 })
 export class AchievementsComponent implements OnInit {
-  httpError: any;
-  loading: boolean = true;
-  constructor(private api: ApiService, private userService: UserService, private router: Router ) {
+
+  // loading indicator
+  protected loading: boolean = true;
+
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastService) {
   }
-    ngOnInit(): void {
-      if (!this.userService.isLoggedIn()) {this.router.navigate(['/login']);}
-      if (this.userService.isTeacher()) {this.router.navigate(['/dashboard']);}
-      this.loading = false;
+
+  ngOnInit(): void {
+    if (!this.userService.isLoggedIn()) {
+      this.router.navigate(['/login']);
     }
+    if (this.userService.isTeacher()) {
+      this.router.navigate(['/dashboard']);
+    }
+    this.loadAchievements()
+  }
+
+  private loadAchievements(): void {
+    this.loading = false;
+    this.toast.show('Belohnungen konnten nicht geladen werden', 'error');
+  }
 }

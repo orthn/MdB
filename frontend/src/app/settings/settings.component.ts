@@ -14,11 +14,20 @@ import {ICONS} from '../data/icons';
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent implements OnInit {
-  loading = true;
-  saving: boolean = false;
-  user: User = new User();
+  protected readonly icons = ICONS;
+  protected user: User = new User();
 
-  constructor(private api: ApiService, private userService: UserService, private router: Router, private toast: ToastService) {
+  // loading indicator
+  protected loading: boolean = true;
+
+  // saving indicator
+  protected saving: boolean = false;
+
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastService) {
   }
 
   ngOnInit(): void {
@@ -29,9 +38,9 @@ export class SettingsComponent implements OnInit {
     this.loadSettings()
   }
 
-  loadSettings(): void {
+  private loadSettings(): void {
     this.api.getUserById(this.user._id ?? '').subscribe({
-      next: user => {
+      next: (user: User) => {
         this.user = user;
         this.loading = false;
       },
@@ -42,7 +51,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  save(): void {
+  protected save(): void {
     this.saving = true;
     this.api.updateUser(this.user).subscribe({
       next: () => {
@@ -56,6 +65,4 @@ export class SettingsComponent implements OnInit {
       }
     });
   }
-
-  protected readonly icons = ICONS;
 }

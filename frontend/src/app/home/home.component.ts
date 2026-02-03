@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Challenge } from '../models/Challenge';
-import { ApiService } from '../services/api.service';
-import { forkJoin } from 'rxjs';
-import { Level } from '../models/Level';
-import { ToastService } from '../services/toast.service';
-import { UserService } from '../services/user.service';
-import { Router } from '@angular/router';
-import { UserProgress } from '../models/UserProgress';
+import {Component, Input, OnInit} from '@angular/core';
+import {Challenge} from '../models/Challenge';
+import {ApiService} from '../services/api.service';
+import {forkJoin} from 'rxjs';
+import {Level} from '../models/Level';
+import {ToastService} from '../services/toast.service';
+import {UserService} from '../services/user.service';
+import {Router} from '@angular/router';
+import {UserProgress} from '../models/UserProgress';
 import {ICONS} from '../data/icons';
 
 @Component({
@@ -21,31 +21,24 @@ export class HomeComponent implements OnInit {
 
   challenges: Challenge[] = [];
   progress: UserProgress[] = [];
-  loading = true;
+
+  // loading indicator
+  protected loading: boolean = true;
 
   constructor(
     private api: ApiService,
     private toast: ToastService,
     private userService: UserService,
-    private router: Router
-  ) {}
+    private router: Router) {
+  }
 
   ngOnInit(): void {
-    if (!this.userService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    if (this.userService.isTeacher()) {
-      this.router.navigate(['/dashboard']);
-      return;
-    }
-
+    //this.userService.checkIfUserIsAllowedAndReroute()
     this.loadLearningPath();
     this.loadProgress();
   }
 
-  loadProgress(): void {
+  private loadProgress(): void {
     this.api.getCompletedLevels(this.userService.getUser()._id).subscribe({
       next: progress => {
         this.progress = progress;
@@ -54,7 +47,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  loadLearningPath(): void {
+  private loadLearningPath(): void {
     this.api.getAllChallenges().subscribe({
       next: challenges => {
         this.challenges = challenges.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -97,7 +90,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  startLevel(level: Level): void {
+  protected startLevel(level: Level): void {
     if (!level.isActive) {
       this.toast.show('Dieses Level ist noch nicht verfügbar', 'info');
       return;
@@ -106,7 +99,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/level', level._id]);
   }
 
-  getGlobalIndex(challengeIndex: number, levelIndex?: number): number {
+  protected getGlobalIndex(challengeIndex: number, levelIndex?: number): number {
     let offset = 0;
     for (let i = 0; i < challengeIndex; i++) {
       offset += 2 + this.challenges[i].levels.length;

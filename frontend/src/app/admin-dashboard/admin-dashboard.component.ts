@@ -14,18 +14,20 @@ import {Router} from '@angular/router';
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent implements OnInit {
-  breadcrumbLabel: string = 'Dashboard';
-  icons = ICONS;
-  httpError: any;
+  protected readonly icons = ICONS;
+  protected students: User[] = [];
+  protected courses: Course[] = [];
+
+  // loading indicator
+  protected loading: boolean = true;
+
   isTeacher: boolean = false;
 
-  students: User[] = [];
-  courses: Course[] = [];
-
-  constructor(private api: ApiService,
-              private toast: ToastService,
-              private userService: UserService,
-              private router: Router) {
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private toast: ToastService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -40,72 +42,70 @@ export class AdminDashboardComponent implements OnInit {
     }
     this.loadStudents()
     this.loadCourses()
+    this.loading = false;
   }
 
-  loadStudents(): void {
+  private loadStudents(): void {
     this.api.getAllUsers().subscribe({
-      next: (students) => {
+      next: (students: User[]) => {
         this.students = students;
       },
-      error: (err) => {
-        this.httpError = err;
+      error: () => {
+        this.toast.show('Studenten konnten nicht geladen werden', 'error')
       }
     })
   }
 
-  loadCourses(): void {
+  private loadCourses(): void {
     this.api.getAllCourses().subscribe({
-      next: (courses) => {
+      next: (courses: Course[]) => {
         this.courses = courses;
       },
-      error: (err) => {
-        this.httpError = err;
+      error: () => {
+        this.toast.show('Klassen konnten nicht geladen werden', 'error')
       }
     })
   }
 
-  deleteStudent(student: User): void {
-    const label = student.gender === 'female' ? 'Schülerin' : 'Schüler';
+  protected deleteStudent(student: User): void {
+    const label: string = student.gender === 'female' ? 'Schülerin' : 'Schüler';
     this.api.deleteUser(student?._id ?? '').subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.show(
           `${label} ${student.firstName} wurde gelöscht`,
           'success'
         );
         this.loadStudents()
       },
-      error: (error) => {
-        this.toast.show("Fehler beim Löschen", "error");
-        this.httpError = error;
+      error: () => {
+        this.toast.show('Student konnte nicht gelöscht werden', "error");
       }
     })
   }
 
-  deleteCourse(course: Course): void {
+  protected deleteCourse(course: Course): void {
     this.api.deleteCourse(course?._id ?? '').subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.show(`Klasse ${course.name} wurde gelöscht`, "success");
         this.loadCourses()
         // Focus the "Klassen" tab
         const classesTabButton = document.querySelector('#classes-tab') as HTMLElement;
         classesTabButton.focus()
       },
-      error: (error) => {
-        this.toast.show("Fehler beim Löschen der Klasse", "error");
-        this.httpError = error;
+      error: () => {
+        this.toast.show('Klasse konnte nicht gelöscht werden', "error");
       }
     })
   }
 
-  resetPassword(student: User): void {
+  protected resetPassword(student: User): void {
     this.api.resetPassword(student?._id ?? '').subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.show(`Passwort für ${student.username} zurückgesetzt`, "success");
         this.loadStudents()
       },
-      error: (error) => {
-        this.toast.show("Fehler beim Zurücksetzen des Passworts!", "error");
-        this.httpError = error;
+      error: () => {
+        this.toast.show("Passwort konnte nicht zurückgesetzt werden", "error");
       }
     })
   }

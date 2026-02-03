@@ -5,6 +5,7 @@
 }
 
 .title {
+  color: #fff;
   font-size: 2rem;
   margin-bottom: 30px;
 }
@@ -85,5 +86,13 @@
 }
 
 .levels {
+  color: gold;
+}
+
+.empty-card {
+  background: #2c2f48;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.3);
   color: gold;
 }

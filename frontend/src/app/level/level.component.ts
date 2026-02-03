@@ -41,6 +41,11 @@ export class LevelComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    //this.userService.checkIfUserIsAllowedAndReroute();
+    this.loadLevel()
+  }
+
+  private loadLevel() {
     this.user = this.userService.getUser()
     const levelId = this.route.snapshot.params['id']
 

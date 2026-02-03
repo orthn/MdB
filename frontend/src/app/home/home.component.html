@@ -6,6 +6,10 @@
   Lade Challenges...
 </div>
 
+<div *ngIf="!loading && challenges.length == 0" class="text-muted">
+  Aktuell sind keine Challenges verfügar, komm später wieder!
+</div>
+
 <!-- I want this to look somehow like the duolingo path interface -->
 <div *ngIf="!loading">
   <div *ngIf="challenges?.length">

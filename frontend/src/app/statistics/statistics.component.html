@@ -12,7 +12,7 @@
 
   <!-- Empty -->
   <div *ngIf="!loading && stats.totalCompletedLevels === 0" class="empty-card">
-    😔 Du hast noch kein Level gespielt!
+    Du hast noch kein Level gespielt!
     <br>
     Starte ein Level und erklimme die Bestenliste!
   </div>
@@ -57,29 +57,29 @@
 
     <h3>🏅 Challenges</h3>
 
-    <div class="challenge-row"
-         *ngFor="let challenge of stats.levelsPerChallenge | keyvalue">
+    <div class="challenge-row" *ngFor="let challenge of stats.levelsPerChallenge">
 
       <!-- Challenge Name -->
       <span class="challenge-name">
-      {{ challenge.key }}
-    </span>
+    {{ challenge.title }}
+  </span>
 
       <!-- Progress Bar -->
       <div class="bar">
         <div class="fill"
              [style.width.%]="
-             (challenge.value.completed / challenge.value.total) * 100
-           ">
+           challenge.total
+             ? (challenge.completed / challenge.total) * 100
+             : 0
+         ">
         </div>
       </div>
 
       <!-- Completed / Total -->
       <span class="challenge-count">
-      {{ challenge.value.completed }} / {{ challenge.value.total }}
-    </span>
+    {{ challenge.completed }} / {{ challenge.total }}
+  </span>
 
     </div>
-
   </div>
 </div>

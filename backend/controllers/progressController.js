@@ -91,15 +91,18 @@ const getMyStatistics = async (req, res) => {
             totalMap[t._id.toString()] = t.total;
         });
 
-        const levelsPerChallenge = {};
+        const levelsPerChallenge = [];
 
         challenges.forEach(c => {
             const idStr = c._id.toString();
 
-            levelsPerChallenge[c.title] = {
+            levelsPerChallenge.push({
+                challengeId: idStr,
+                title: c.title,
+                order: c.order,
                 completed: completedMap[idStr] || 0,
                 total: totalMap[idStr] || 0
-            };
+            });
         });
 
         return res.status(200).json({
@@ -110,7 +113,7 @@ const getMyStatistics = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({
-            message: 'Failed to load statistics',
+            message: 'Failed to load stats',
             error
         });
     }

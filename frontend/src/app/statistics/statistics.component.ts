@@ -4,6 +4,7 @@ import {UserService} from '../services/user.service';
 import {Router} from '@angular/router';
 import {Statistics} from '../models/Statistics';
 import {ICONS} from '../data/icons';
+import {ToastService} from '../services/toast.service';
 
 @Component({
   selector: 'app-statistics',
@@ -12,17 +13,24 @@ import {ICONS} from '../data/icons';
   styleUrl: './statistics.component.scss'
 })
 export class StatisticsComponent implements OnInit {
-  httpError: any;
-  loading = true;
-  icons = ICONS;
-  stats!: Statistics;
+  protected stats: Statistics = {
+    totalCompletedLevels: 0,
+    totalAttempts: 0,
+    levelsPerChallenge: []
+  };
 
-  constructor(private api: ApiService, private userService: UserService, private router: Router ) {
+  // loading indicator
+  protected loading: boolean = true;
+
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastService) {
   }
 
   ngOnInit(): void {
-    if (!this.userService.isLoggedIn()) {this.router.navigate(['/login']);}
-    if (this.userService.isTeacher()) {this.router.navigate(['/dashboard']);}
+    //this.userService.checkIfUserIsAllowedAndReroute()
     this.loadStatistics()
   }
 
@@ -34,7 +42,7 @@ export class StatisticsComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.httpError = error;
+        this.toast.show('Statistiken konnten nicht geladen werden', 'error')
         this.loading = false;
       }
     })

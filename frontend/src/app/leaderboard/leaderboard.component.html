@@ -5,6 +5,18 @@
 <div class="leaderboard-container text-white">
   <h2 class="title">🏆 Bestenliste</h2>
 
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    Lade deine Statistiken...
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && leaderboard.length == 0" class="empty-card ">
+    Die Bestenliste ist aktuell leer.
+    <br>
+    Starte ein Level und erklimme die Bestenliste!
+  </div>
+
   <!-- PODIUM -->
   <div class="podium" *ngIf="leaderboard.length >= 3">
 
