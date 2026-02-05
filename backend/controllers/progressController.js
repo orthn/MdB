@@ -1,4 +1,6 @@
 const UserProgress = require('../models/userProgress');
+const Level = require("../models/level");
+const User = require("../models/user");
 
 const updateProgress = async (req, res) => {
     try {
@@ -9,12 +11,40 @@ const updateProgress = async (req, res) => {
             return res.status(400).json({message: 'Missing required fields'});
         }
 
-        const progress = await UserProgress.findOneAndUpdate({userId, levelId}, // UNIQUE KEY
-            {
-                userId, challengeId, levelId, completed: true, completedAt: new Date(), $inc: {attempts: attempts ?? 1}
-            }, {
-                new: true, upsert: true // creates if it does not exist
+        // Check for existing
+        let progress = await UserProgress.findOne({ userId, levelId });
+
+        // ALWAYS inc attempts
+        if (progress) {
+            progress.attempts += attempts ?? 1;
+        }
+
+        // Grant XP only on first completion of level
+        if (!progress || !progress.completed) {
+            const level = await Level.findById(levelId).select('xpReward');
+            const xpReward = level?.xpReward ?? 10;
+            progress = await UserProgress.findOneAndUpdate(
+                { userId, levelId },
+                {
+                    userId,
+                    challengeId,
+                    levelId,
+                    completed: true,
+                    completedAt: new Date(),
+                    xpEarned: xpReward,
+                    $inc: { attempts: attempts ?? 1 }
+                },
+                { new: true, upsert: true }
+            );
+
+            // ⭐ increment cached total XP on user
+            await User.findByIdAndUpdate(userId, {
+                $inc: { xp: xpReward }
             });
+
+        } else {
+            await progress.save();
+        }
 
         return res.status(200).json(progress);
     } catch (error) {

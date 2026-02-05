@@ -60,8 +60,8 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
   margin-bottom: 40px;
 }
 
@@ -92,6 +92,20 @@
 
 .stat-label {
   opacity: .8;
+}
+
+.xp-card {
+  border: 2px solid #22c55e;
+  background: linear-gradient(135deg, #14532d, #166534);
+}
+
+.xp-card .stat-value {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.xp-card .stat-icon {
+  font-size: 1.6rem;
 }
 
 /* CHALLENGES */

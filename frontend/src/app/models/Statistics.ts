@@ -1,4 +1,5 @@
 export class Statistics {
+  xp?: number;
   totalCompletedLevels?: number;
   totalAttempts?: number;
   levelsPerChallenge?: ChallengeStats[];

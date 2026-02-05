@@ -1,6 +1,7 @@
 const UserProgress = require("../models/userProgress");
 const Challenge = require("../models/challenge");
 const Level = require("../models/level");
+const User = require("../models/user");
 
 const getMyStatistics = async (req, res) => {
     try {
@@ -8,6 +9,11 @@ const getMyStatistics = async (req, res) => {
 
         if (!id) {
             return res.status(400).json({message: 'Missing ID'});
+        }
+
+        const user = await User.findById(id).select("xp");
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
         }
 
         // get completed progress
@@ -58,7 +64,7 @@ const getMyStatistics = async (req, res) => {
         });
 
         return res.status(200).json({
-            totalCompletedLevels, totalAttempts, levelsPerChallenge
+            xp: user.xp, totalCompletedLevels, totalAttempts, levelsPerChallenge
         });
 
     } catch (error) {
@@ -119,6 +125,5 @@ const getAllStatistics = async (req, res) => {
 };
 
 module.exports = {
-    getMyStatistics,
-    getAllStatistics
+    getMyStatistics, getAllStatistics
 }

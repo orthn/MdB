@@ -22,14 +22,18 @@ const levelSchema = new mongoose.Schema({
     starterBlocks: {type: [String], default: null},     // FOR BLOCK BASED LEVELS
     expectedOutput: String,
     hints: [hintSchema],
+    order: Number,
+    isActive: Boolean,
+    difficulty: {type: String, enum: ['easy', 'medium', 'hard'], default: 'easy'},
+    xpReward: {
+        type: Number,
+        default: 10
+    },
     solutions: {
         type: [solutionSchema], validate: {
             validator: sols => sols.some(s => s.isCorrect), message: 'Zumindest eine richtige Antwort ist erforderlich'
         }
-    },
-    order: Number,
-    difficulty: {type: String, enum: ['easy', 'medium', 'hard'], default: 'easy'},
-    isActive: Boolean
+    }
 }, {timestamps: true});
 
 const Level = mongoose.models.Level || mongoose.model('Level', levelSchema);

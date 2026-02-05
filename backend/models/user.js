@@ -3,17 +3,11 @@ const helpers = require("../services/helper");
 
 const userSettingsSchema = new mongoose.Schema({
     showHints: {
-        type: Boolean,
-        default: true
-    },
-    showAnimations: {
-        type: Boolean,
-        default: true
-    },
-    theme: {
-        type: String,
-        enum: ['light', 'dark', 'system'],
-        default: 'dark'
+        type: Boolean, default: true
+    }, showAnimations: {
+        type: Boolean, default: true
+    }, theme: {
+        type: String, enum: ['light', 'dark', 'system'], default: 'dark'
     }
 }, {_id: false});
 
@@ -26,13 +20,12 @@ const userSchema = new mongoose.Schema({
     isLocked: {type: Boolean, default: false},
     role: {type: String, enum: ['student', 'teacher'], default: 'student'},
     settings: {
-        type: userSettingsSchema,
-        default: () => ({})
+        type: userSettingsSchema, default: () => ({})
     },
     classes: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class'
+        type: mongoose.Schema.Types.ObjectId, ref: 'Class'
     },
+    xp: {type: Number, default: 0, index: true},
     absolvedLevels: []
 });
 

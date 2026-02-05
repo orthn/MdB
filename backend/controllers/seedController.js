@@ -29,8 +29,9 @@ const seed = async (req, res) => {
                     {mode: 'blocks', code: 'int x = 3;', isCorrect: true, feedback: 'Das hast du super gelöst!'},
                 ],
                 order: 1,
+                isActive: true,
+                xpReward: 10,
                 difficulty: 'easy',
-                isActive: true
             },
             {
                 challengeId: variables._id,
@@ -46,7 +47,8 @@ const seed = async (req, res) => {
                 ],
                 order: 1,
                 difficulty: 'easy',
-                isActive: true
+                xpReward: 10,
+                isActive: true,
             },
             {
                 challengeId: variables._id,
@@ -60,8 +62,9 @@ const seed = async (req, res) => {
                     {mode: 'code', code: 'console.log(x);', isCorrect: true}
                 ],
                 order: 2,
+                isActive: true,
+                xpReward: 10,
                 difficulty: 'easy',
-                isActive: true
             },
             {
                 challengeId: variables._id,
@@ -75,8 +78,9 @@ const seed = async (req, res) => {
                     {mode: 'code', code: 'int x = 3;\nint y = 5;\nconsole.log(x + y);', isCorrect: true}
                 ],
                 order: 3,
+                isActive: false,
                 difficulty: 'medium',
-                isActive: false
+                xpReward: 20,
             }
         ]);
 
@@ -104,8 +108,9 @@ const seed = async (req, res) => {
                     {mode: 'code', code: 'for (let i = 1; i <= 5; i++) { console.log(i); }', isCorrect: true}
                 ],
                 order: 1,
+                isActive: true,
                 difficulty: 'easy',
-                isActive: true
+                xpReward: 10,
             },
             {
                 challengeId: loops._id,
@@ -123,8 +128,9 @@ const seed = async (req, res) => {
                     }
                 ],
                 order: 2,
+                isActive: false,
+                xpReward: 20,
                 difficulty: 'medium',
-                isActive: false
             }
         ]);
 
@@ -154,6 +160,7 @@ const seed = async (req, res) => {
                 ],
                 order: 1,
                 difficulty: 'easy',
+                xpReward: 10,
                 isActive: true
             },
             {
@@ -173,6 +180,7 @@ const seed = async (req, res) => {
                 ],
                 order: 2,
                 difficulty: 'medium',
+                xpReward: 20,
                 isActive: false
             }
         ]);
@@ -198,6 +206,7 @@ const seed = async (req, res) => {
                 ],
                 order: 1,
                 difficulty: 'easy',
+                xpReward: 10,
                 isActive: true
             },
             {
@@ -213,6 +222,7 @@ const seed = async (req, res) => {
                 ],
                 order: 2,
                 difficulty: 'medium',
+                xpReward: 20,
                 isActive: false
             }
         ]);
@@ -239,6 +249,7 @@ const seed = async (req, res) => {
                 ],
                 order: 1,
                 difficulty: 'easy',
+                xpReward: 10,
                 isActive: true
             },
             {
@@ -254,6 +265,7 @@ const seed = async (req, res) => {
                 ],
                 order: 2,
                 difficulty: 'medium',
+                xpReward: 20,
                 isActive: false
             },
             {
@@ -269,6 +281,7 @@ const seed = async (req, res) => {
                 ],
                 order: 3,
                 difficulty: 'hard',
+                xpReward: 50,
                 isActive: false
             }
         ]);
