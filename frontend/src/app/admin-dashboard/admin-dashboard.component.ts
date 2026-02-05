@@ -109,4 +109,34 @@ export class AdminDashboardComponent implements OnInit {
       }
     })
   }
+
+  protected addStudentToCourse(student: User, classId: string): void {
+    this.api.addStudentToCourse(classId, student._id!)
+      .subscribe({
+        next: () => {
+          this.toast.show(`${student.firstName} wurde zur Klasse hinzugefügt`,'success');
+          this.loadCourses();
+        },
+        error: () => {
+          this.toast.show('Schüler konnte nicht hinzugefügt werden', 'error');
+        }
+      });
+  }
+
+  protected removeStudentFromCourse(student: User, classId: string): void {
+    this.api.removeStudentFromCourse(classId, student._id!)
+      .subscribe({
+        next: () => {
+          this.toast.show(`${student.firstName} wurde aus Klasse entfernt`,'success');
+          this.loadCourses();
+        },
+        error: () => {
+          this.toast.show('Konnte Schüler nicht entfertn werden', 'error');
+        }
+      });
+  }
+
+  protected showStatistics(student: User) {
+
+  }
 }

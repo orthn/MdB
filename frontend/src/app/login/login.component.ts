@@ -20,55 +20,54 @@ import {NgIf} from '@angular/common';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-  login: FormGroup;
-  httpError: any;
+  protected login: FormGroup;
+  protected httpError: any;
+
+  protected readonly faLock = faLock;
+  protected readonly faEnvelope = faEnvelope;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
     private api: ApiService,
     private toast: ToastService
   ) {
-    this.login = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+    this.login = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
     if (this.userService.isLoggedIn()) {
-      if (this.userService.getUser().isTeacher) {
-        this.router.navigate(['/dashboard']);
-      } else this.router.navigate(['/home']);
+      this.redirectUser()
     }
   }
 
-  protected readonly faLock = faLock;
-  protected readonly faEnvelope = faEnvelope;
-
-  onSubmit() {
-    console.log('Login form submitted', this.login.value);
-
-    const loginData = this.login.value;
-
-    this.api.login(loginData).subscribe({
+  protected onSubmit() {
+    if (this.login.invalid) return;
+    this.api.login(this.login.value).subscribe({
       next: (response) => {
-        if (response.token) {
-          this.toast.show("Login erfolgreich!", "success");
-          this.userService.setUser(response.user);
-          this.userService.applySettings(response.user.settings);
-          this.userService.saveToken(response.token);
-
-          if (this.userService.getUser().isTeacher) {
-            this.router.navigate(['/dashboard']);
-          } else this.router.navigate(['/home']);
-        }
+        this.userService.saveToken(response.token);
+        // Apply settings from decoded JWT
+        const user = this.userService.getUser();
+        this.userService.applySettings(user?.settings);
+        this.toast.show("Login erfolgreich!", "success");
+        this.redirectUser();
       },
-      error: (error) => {
+      error: () => {
         this.toast.show("Login fehlgeschlagen", "error");
-        this.httpError = error;
       }
     });
+  }
+
+  private redirectUser() {
+    const user = this.userService.getUser();
+    if (user?.role === 'teacher') {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 }

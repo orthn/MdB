@@ -18,17 +18,18 @@ export class EditStudentComponent implements OnInit {
 
   user: User = {
     firstName: '', gender: 'male', isLocked: false, isTeacher: false, lastName: '', password: '', username: '',
-    settings: {showHints: false, showAnimations: false}
+    settings: {showHints: false, showAnimations: false, theme: "light"}
   }
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute, private toast: ToastService) { }
+  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute, private toast: ToastService) {
+  }
 
   ngOnInit(): void {
     if (this.route.snapshot.paramMap.get('studentId')) {
       this.user._id = String(this.route.snapshot.paramMap.get('studentId'));
       this.api.getUserById(this.user._id).subscribe({
         next: student => {
-         this.user = student
+          this.user = student
         },
         error: error => {
           this.httpError = error;

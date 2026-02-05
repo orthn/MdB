@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {UserService} from '../services/user.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Statistics} from '../models/Statistics';
-import {ICONS} from '../data/icons';
 import {ToastService} from '../services/toast.service';
 
 @Component({
@@ -25,18 +24,16 @@ export class StatisticsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private userService: UserService,
-    private router: Router,
+    private route: ActivatedRoute,
     private toast: ToastService) {
   }
 
   ngOnInit(): void {
-    //this.userService.checkIfUserIsAllowedAndReroute()
-    this.loadStatistics()
+      this.loadStatistics()
   }
 
   private loadStatistics() {
-    const userId: string = this.userService.getUser()._id
-    this.api.getUserStats(userId).subscribe({
+    this.api.getStatisticsOfUserById(this.userService.getUser().id).subscribe({
       next: data => {
         this.stats = data;
         this.loading = false;

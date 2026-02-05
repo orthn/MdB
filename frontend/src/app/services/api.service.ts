@@ -19,6 +19,7 @@ export class ApiService {
   private classes: string = '/classes'
   private challenges: string = '/challenges';
   private progress: string = '/progress';
+  private statistics: string = '/statistics';
   private leaderboard: string = '/leaderboard';
 
   constructor(private http: HttpClient) {}
@@ -67,6 +68,14 @@ export class ApiService {
     return this.http.put(`${this.baseUrl}${this.classes}/${course._id}/update`, course);
   }
 
+  addStudentToCourse(classId: string, studentId: string) {
+    return this.http.post(this.baseUrl + this.classes + '/add-student' , {classId,studentId});
+  }
+
+  removeStudentFromCourse(classId: string, studentId: string) {
+    return this.http.post(this.baseUrl + this.classes + '/remove-student' , {classId,studentId});
+  }
+
   login(loginBody: any): Observable<any> {
     return this.http.post(this.baseUrl + this.users + '/login', loginBody)
       .pipe(catchError(this.handleError));
@@ -74,10 +83,6 @@ export class ApiService {
 
   getAllChallenges() {
     return this.http.get<Challenge[]>(this.baseUrl + this.challenges);
-  }
-
-  getChallengeById(id: string) {
-    return this.http.get<Challenge>(this.baseUrl + this.challenges + '/' + id);
   }
 
   getLevelsOfChallenge(challengeId: string) {
@@ -88,16 +93,12 @@ export class ApiService {
     return this.http.get<Level>(this.baseUrl + this.challenges + '/' + challengeId + '/level');
   }
 
-  getUserProgressByUserId(id: string) {
-    return this.http.get<UserProgress>(this.baseUrl + this.progress + '/' + id);
-  }
-
   getCompletedLevels(id:string) {
     return this.http.get<UserProgress[]>(this.baseUrl + this.progress + '/' + id+ '/completed');
   }
 
-  getUserStats(id: string) {
-    return this.http.get<Statistics>(this.baseUrl + this.progress + '/' + id+ '/stats');
+  getStatisticsOfUserById(id: string) {
+    return this.http.get<Statistics>(this.baseUrl + this.statistics + '/' + id);
   }
 
   updateUserProgress(progress: UserProgress) {

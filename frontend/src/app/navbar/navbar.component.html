@@ -1,16 +1,19 @@
 <nav class="navbar navbar-dark bg-body-tertiary pb-2 bg-image-navbar">
   <div class="container-fluid">
-    <b class="navbar-brand hide-on-desktop ps-4 ms-2" >Meister der Blöcke</b>
+    <b class="navbar-brand hide-on-desktop ps-4 ms-2">Meister der Blöcke</b>
     <button aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler hide-on-desktop border-0 text-white" data-bs-target="#navbarsExample01" data-bs-toggle="collapse"
+            class="navbar-toggler hide-on-desktop border-0 text-white" data-bs-target="#navbarsExample01"
+            data-bs-toggle="collapse"
             type="button">
       <fa-icon [icon]="icons.BARS" class="text-white"></fa-icon>
     </button>
 
     <div class="d-flex align-items-center ms-auto hide-on-mobile">
-      <button (click)="navigateToSettings()" class="text-light zoom icon-btn" title="Einstellunen">
-        <fa-icon [icon]="icons.SLIDERS"></fa-icon>
-      </button>
+      <div *ngIf="!userService.isTeacher() && userService.isLoggedIn()">
+        <button (click)="navigateToSettings()" class="text-light zoom icon-btn" title="Einstellunen">
+          <fa-icon [icon]="icons.SLIDERS"></fa-icon>
+        </button>
+      </div>
 
       <button (click)="logout()" class="text-light zoom icon-btn" title="Logout">
         <fa-icon [icon]="icons.ARROW_RIGHT_FROM_BRACKET"></fa-icon>

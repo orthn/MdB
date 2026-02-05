@@ -1,0 +1,59 @@
+/* CHALLENGES */
+
+.challenge-section h3 {
+  margin-bottom: 15px;
+}
+
+.challenge-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+
+  background: #2c2f48;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+
+  transition: transform .15s;
+}
+
+.challenge-row:hover {
+  transform: scale(1.02);
+}
+
+.challenge-name {
+  font-weight: bold;
+}
+
+/* BAR */
+
+.bar {
+  height: 10px;
+  background: #1b1e33;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, gold, orange);
+}
+
+/* SUMMARY */
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  background: linear-gradient(135deg, #FFD700, #FFC300);
+  color: #222;
+
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.4);
+}

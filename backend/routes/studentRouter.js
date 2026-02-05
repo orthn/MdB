@@ -1,3 +1,5 @@
+const auth = require('../middleware/auth');
+const authorize = require('../middleware/roles');
 const express = require('express');
 const router = express.Router();
 
@@ -16,6 +18,7 @@ const {
 router.get('/getAll', getStudents);
 router.get('/:id', getStudentById)
 router.get('/:id/settings', getUserSettings)
+//router.get('/getAll', auth, authorize('teacher'), getStudents)
 
 /**
  * @swagger

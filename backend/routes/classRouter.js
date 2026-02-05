@@ -16,10 +16,10 @@ router.post('/create', createClass);
 router.put('/:id/update', updateClass);
 
 // add student to class
-router.post('/:classID/:studentID', addStudentToClass);
+router.post('/add-student', addStudentToClass);
 
 // remove student from class
-router.patch('/:classID/:studentID', removeStudentFromClass);
+router.patch('/remove-student', removeStudentFromClass);
 
 // delete class
 router.delete('/:id', deleteClass);

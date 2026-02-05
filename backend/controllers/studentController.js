@@ -15,16 +15,24 @@ const login = async (req, res) => {
             return res.status(401).json({message: 'Invalid username or password'});
         }
 
+        if (user.isLocked) {
+            return res.status(403).json({message: 'User is locked'});
+        }
+
         const isPasswordValid = user.password === password;
         if (!isPasswordValid) {
             return res.status(401).json({message: 'Invalid username or password'});
         }
 
-        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES});
-        const {password: _, ...userWithoutPassword} = user.toObject();
+        const payload = {
+            id: user._id, firstName: user.firstName ,role: user.role, settings: user.settings
+        };
 
-        return res.status(200).json({token, user: userWithoutPassword});
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '7d'});
+
+        return res.status(200).json({token});
     } catch (error) {
+        console.log("Error when trying to login")
         return res.status(500).json({message: 'Internal server error'});
     }
 }
@@ -57,8 +65,7 @@ const createMany = async (req, res) => {
         const createdStudents = await User.insertMany(students, {ordered: false});
 
         return res.status(201).json({
-            message: `${createdStudents.length} student(s) created successfully`,
-            students: createdStudents,
+            message: `${createdStudents.length} student(s) created successfully`, students: createdStudents,
         });
     } catch (error) {
         console.error(error);
@@ -93,7 +100,7 @@ const resetPassword = async (req, res) => {
 
 const getStudents = async (req, res) => {
     try {
-        const students = await User.find({isTeacher: false});
+        const students = await User.find({role: 'student'}).select('-password');
         return res.status(200).json(students)
     } catch (error) {
         return res.status(400).send({message: 'Failed to retrieve students', error});
@@ -102,7 +109,10 @@ const getStudents = async (req, res) => {
 
 const getStudentById = async (req, res) => {
     try {
-        const student = await User.findById({_id: req.params.id});
+        const student = await User
+            .findById({_id: req.params.id})
+            .select('-password');
+
         if (!student) {
             return res.status(404).json({message: 'User not found'});
         }
@@ -138,7 +148,7 @@ const updateUser = async (req, res) => {
             return res.status(400).json({message: 'Missing student ID'});
         }
 
-        const student = await User.findById({_id: id});
+        const student = await User.findById({_id: id}).select('-password');
         if (!student) {
             return res.status(404).json({message: 'User not found'});
         }
@@ -157,7 +167,6 @@ const updateUser = async (req, res) => {
         return res.status(500).json({message: 'Failed to reset password', error});
     }
 }
-
 
 
 const getUserSettings = async (req, res) => {

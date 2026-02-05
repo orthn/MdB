@@ -1,5 +1,6 @@
 const Class = require("../models/class");
 const Student = require("../models/user");
+const User = require("../models/user");
 
 const home = async (req, res) => {
     res.status(200).json({message: 'Welcome to classes!'});
@@ -32,50 +33,44 @@ const getClasses = async (req, res) => {
     }
 }
 
+
 const addStudentToClass = async (req, res) => {
     try {
-        const {classID, studentID} = req.params;
+        const {classId, studentId} = req.body;
 
-        const retrievedClass = await Class.findById({_id: classID})
-        if (!retrievedClass) {
-            return res.status(404).json({message: 'No Class Found'});
+        if (!classId || !studentId) {
+            return res.status(400).json({message: 'classId and studentId required'});
         }
 
-        // Check if user already exists in the class
-        if (retrievedClass.students.includes(studentID)) {
-            return res.status(400).json({message: 'Student already in class'});
+        const student = await User.findById(studentId);
+
+        if (!student || student.role !== 'student') {
+            return res.status(404).json({message: 'Student not found'});
         }
 
-        // Add user and save
-        retrievedClass.students.push(studentID);
-        await retrievedClass.save();
+        // prevent duplicates
+        await Class.findByIdAndUpdate(classId, {$addToSet: {students: studentId}});
+        await User.findByIdAndUpdate(studentId, {$addToSet: {classes: classId}});
 
-        return res.status(200).json({message: 'Successfully added user to class'});
+        return res.status(200).json({message: 'Student added to class'});
     } catch (error) {
-        return res.status(500).json({message: 'Internal server error'});
+        return res.status(500).json({message: 'Failed to add student', error});
     }
-}
+};
 
 const removeStudentFromClass = async (req, res) => {
     try {
-        const {classID, studentID} = req.params;
+        const {classId, studentId} = req.body;
 
-        const retrievedClass = await Class.findById({_id: classID})
-        if (!retrievedClass) {
-            return res.status(404).json({message: 'No Class Found'});
-        }
+        await Class.findByIdAndUpdate(classId, {$pull: {students: studentId}});
+        await User.findByIdAndUpdate(studentId, {$pull: {classes: classId}});
 
-        if (!retrievedClass.students.includes(studentID)) {
-            return res.status(404).json({message: 'Student not in class'});
-        }
-
-        retrievedClass.students.splice(retrievedClass.students.indexOf(studentID), 1);
-        await retrievedClass.save();
-        return res.status(200).json({message: 'Successfully removed student'});
+        return res.status(200).json({message: 'Student removed from class'});
     } catch (error) {
-        return res.status(500).json({message: 'Internal server error'});
+        return res.status(500).json({message: 'Failed to remove student', error});
     }
-}
+};
+
 
 const createClass = async (req, res) => {
     try {

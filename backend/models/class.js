@@ -13,13 +13,13 @@ const classSchema = new mongoose.Schema({
     students: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Student', // reference Student model
+            ref: 'User', // reference Student model
         }
     ],
     teachers: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Teacher',
+            ref: 'User',
         }
     ]
 });

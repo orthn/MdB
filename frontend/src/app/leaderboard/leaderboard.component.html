@@ -10,15 +10,15 @@
     Lade deine Statistiken...
   </div>
 
-  <!-- Empty -->
-  <div *ngIf="!loading && leaderboard.length == 0" class="empty-card ">
-    Die Bestenliste ist aktuell leer.
+  <!-- Not Enough Entries -->
+  <div *ngIf="!loading && leaderboard.length < 3" class="empty-card ">
+    Die Bestenliste ist nicht verfügbar.
     <br>
-    Starte ein Level und erklimme die Bestenliste!
+    Lade deine Freunde ein und stellt gemeinsam Rekorde auf!
   </div>
 
   <!-- PODIUM -->
-  <div class="podium" *ngIf="leaderboard.length >= 3">
+  <div class="podium" *ngIf="!loading && leaderboard.length >= 3">
 
     <!-- SECOND -->
     <div class="podium-card second">

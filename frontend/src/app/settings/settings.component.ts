@@ -39,7 +39,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private loadSettings(): void {
-    this.api.getUserById(this.user._id ?? '').subscribe({
+    this.api.getUserById(this.userService.getUser().id).subscribe({
       next: (user: User) => {
         this.user = user;
         this.loading = false;

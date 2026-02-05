@@ -4,6 +4,8 @@ import {ToastService} from '../../services/toast.service';
 import {ICONS} from '../../data/icons';
 import {Course} from '../../models/Course';
 import {User} from '../../models/User';
+import {UserService} from '../../services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-class',
@@ -12,46 +14,55 @@ import {User} from '../../models/User';
   styleUrl: './create-class.component.scss'
 })
 export class CreateClassComponent implements OnInit {
-  httpError: any;
-  icons = ICONS;
-  course: Course = {
-    description: '', name: ''
-  }
+  protected readonly icons = ICONS;
+  protected course: Course = {description: '', name: ''}
+  protected students: User[] = [];
 
-  students: User[] = [];
+  // loading indicator
+  protected loading: boolean = true;
 
-  constructor(private api: ApiService, private toast: ToastService) {
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private router: Router,
+    private toast: ToastService) {
   }
 
   ngOnInit(): void {
+    if (!this.userService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+    } else if (!this.userService.isTeacher()) {
+      this.router.navigate(['/home']);
+    }
+
     this.loadStudents()
   }
 
-  loadStudents(): void {
+  private loadStudents(): void {
     this.api.getAllUsers().subscribe({
-      next: (students) => {
+      next: (students: User[]) => {
         this.students = students;
+        this.loading = false;
       },
-      error: (err) => {
-        this.httpError = err;
+      error: () => {
+        this.toast.show('Studenten konnten nicht geladen werden', 'error')
       }
     })
   }
 
-  createClass() {
+  protected createClass() {
     this.api.createCourse(this.course).subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.show("Klasse wurde erstellt!", 'success');
         this.clearInputs()
       },
-      error: (error) => {
+      error: () => {
         this.toast.show("Klasse konnte nicht erstellt werden", 'error');
-        this.httpError = error;
       }
     })
   }
 
-  clearInputs() {
+  private clearInputs() {
     this.course.name = '';
     this.course.description = '';
     this.course.students = [];

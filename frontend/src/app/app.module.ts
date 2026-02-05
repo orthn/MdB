@@ -11,7 +11,7 @@ import { AppRoutingModule} from './app-routing.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, provideHttpClient, withInterceptors} from '@angular/common/http';
 import {EditStudentComponent} from './admin-dashboard/edit-student/edit-student.component';
 import {CreateStudentComponent} from './admin-dashboard/create-student/create-student.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -26,12 +26,15 @@ import {LevelComponent} from './level/level.component';
 import {CodeEditorComponent} from "./editors/code-editor/code-editor.component";
 import {BlockEditorComponent} from './editors/block-editor/block-editor.component';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
+import { jwtInterceptor } from "./interceptors/jwt.interceptor";
+import {AdminStatisticsComponent} from './admin-dashboard/admin-statistics/admin-statistics.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     AdminDashboardComponent,
+    AdminStatisticsComponent,
     CreateStudentComponent,
     EditStudentComponent,
     CreateClassComponent,
@@ -62,7 +65,11 @@ import {LeaderboardComponent} from './leaderboard/leaderboard.component';
     CodeEditorComponent,
     BlockEditorComponent,
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(
+      withInterceptors([jwtInterceptor])
+    )
+  ],
   bootstrap: [AppComponent],
   exports: [
     BreadcrumbComponent

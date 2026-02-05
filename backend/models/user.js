@@ -9,8 +9,13 @@ const userSettingsSchema = new mongoose.Schema({
     showAnimations: {
         type: Boolean,
         default: true
+    },
+    theme: {
+        type: String,
+        enum: ['light', 'dark', 'system'],
+        default: 'dark'
     }
-}, { _id: false });
+}, {_id: false});
 
 const userSchema = new mongoose.Schema({
     firstName: {type: String, required: true},
@@ -19,10 +24,14 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     gender: {type: String, enum: ['male', 'female'], required: true},
     isLocked: {type: Boolean, default: false},
-    isTeacher: {type: Boolean, default: false},
+    role: {type: String, enum: ['student', 'teacher'], default: 'student'},
     settings: {
         type: userSettingsSchema,
         default: () => ({})
+    },
+    classes: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Class'
     },
     absolvedLevels: []
 });

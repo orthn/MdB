@@ -41,12 +41,10 @@ export class LevelComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    //this.userService.checkIfUserIsAllowedAndReroute();
     this.loadLevel()
   }
 
   private loadLevel() {
-    this.user = this.userService.getUser()
     const levelId = this.route.snapshot.params['id']
 
     this.api.getLevelById(levelId).subscribe({
@@ -64,7 +62,7 @@ export class LevelComponent implements OnInit {
         }
 
         this.userProgress = new UserProgress()
-        this.userProgress.userId = this.user._id ?? ''
+        this.userProgress.userId = this.userService.getUser().id ?? ''
         this.userProgress.challengeId = this.level.challengeId
         this.userProgress.levelId = levelId
 
@@ -94,7 +92,7 @@ export class LevelComponent implements OnInit {
 
     if (matchedSolution?.isCorrect) {
       this.api.updateUserProgress(this.userProgress).subscribe({
-        next: progress => {
+        next: () => {
           this.showCelebration()
           this.feedback = matchedSolution.feedback ?? 'Super! Level abgeschlossen 🎉'
           this.toast.show(this.feedback, 'success')

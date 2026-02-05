@@ -34,7 +34,7 @@
     </div>
 
     <table class="table table-dark table-hover">
-      <thead>
+    <thead>
       <tr>
         <th>Vorname</th>
         <th>Nachname</th>
@@ -52,9 +52,13 @@
             <fa-icon [icon]="icons.PENCIL" class="me-1"></fa-icon>
             ️Bearbeiten
           </button>
-          <button class="btn btn-sm btn-danger" (click)="deleteStudent(student)">
+          <button class="btn btn-sm btn-danger me-2" (click)="deleteStudent(student)">
             <fa-icon [icon]="icons.TRASH" class="me-1"></fa-icon>
             Löschen
+          </button>
+          <button class="btn btn-sm btn-warning" routerLink="/admin-statistics/{{student._id}}">
+            <fa-icon [icon]="icons.TROPHY" class="me-1"></fa-icon>
+            Statistiken
           </button>
         </td>
       </tr>

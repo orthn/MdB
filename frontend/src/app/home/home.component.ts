@@ -33,13 +33,13 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.userService.checkIfUserIsAllowedAndReroute()
-    this.loadLearningPath();
+    if (this.userService.isTeacher()) {this.router.navigate(['/dashboard']);}
     this.loadProgress();
+    this.loadLearningPath();
   }
 
   private loadProgress(): void {
-    this.api.getCompletedLevels(this.userService.getUser()._id).subscribe({
+    this.api.getCompletedLevels(this.userService.getUser().id).subscribe({
       next: progress => {
         this.progress = progress;
         this.applyProgressToLevels();

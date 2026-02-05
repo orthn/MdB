@@ -10,7 +10,7 @@ import {UserService} from '../services/user.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, protected userService: UserService) {
   }
   icons = ICONS;
 

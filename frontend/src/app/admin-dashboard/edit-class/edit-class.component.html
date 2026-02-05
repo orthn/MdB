@@ -3,41 +3,43 @@
   { label: 'Bearbeiten'}
 ]"></app-breadcrumb>
 
-<div *ngIf="httpError" class="alert alert-danger">
-  Fehler beim speichern der Klasse.
-</div>
-
-<div *ngIf="!course?._id && !httpError" class="text-muted">
+<!-- Empty -->
+<div *ngIf="!course?._id" class="alert alert-info text-muted">
   Es ist keine Klasse ausgewählt!
 </div>
 
-<div class="d-flex justify-content-between align-items-center">
-  <h2 class="text-white">Klasse bearbeiten</h2>
-  <div class="d-flex gap-2">
-    <button class="btn btn-danger" routerLink="/dashboard">
-      <fa-icon [icon]="icons.ARROW_LEFT" class="me-2"></fa-icon>
-      <span>Zurück</span>
-    </button>
-    <button class="btn btn-primary" (click)="save()">
-      <fa-icon [icon]="icons.FLOPPY_DISK" class="me-2"></fa-icon>
-      <span>Speichern</span>
-    </button>
+<div>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="text-white">Klasse bearbeiten</h2>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex gap-2">
+      <button class="btn btn-danger" routerLink="/dashboard">
+        <fa-icon [icon]="icons.ARROW_LEFT" class="me-2"></fa-icon>
+        <span>Zurück</span>
+      </button>
+      <button class="btn btn-primary" (click)="save()">
+        <fa-icon [icon]="icons.FLOPPY_DISK" class="me-2"></fa-icon>
+        <span>Speichern</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-3 g-5 mb-5 bg-body-tertiary px-4 py-5 rounded-2 shadow">
+    <form class="mt-0">
+      <div class="text-white row g-3">
+        <div class=" col-lg-12 col-sm-12">
+          <label class="form-label">Klassenname</label>
+          <input type="text" class="form-control" [(ngModel)]="course.name" name="name" placeholder="Klassenname">
+        </div>
+
+        <div class=" col-lg-12 col-sm-12">
+          <label class="form-label">Beschreibung</label>
+          <input type="text" class="form-control" [(ngModel)]="course.description" name="description"
+                 placeholder="Beschreibung">
+        </div>
+      </div>
+    </form>
   </div>
 </div>
-
-<div class="row mt-3 g-5 mb-5 bg-body-tertiary px-4 py-5 rounded-2 shadow">
-  <form class="mt-0">
-    <div class="text-white row g-3">
-      <div class=" col-lg-12 col-sm-12">
-        <label class="form-label">Klassenname</label>
-        <input type="text" class="form-control" [(ngModel)]="course.name" name="name" placeholder="Klassenname">
-      </div>
-
-      <div class=" col-lg-12 col-sm-12">
-        <label class="form-label">Beschreibung</label>
-        <input type="text" class="form-control" [(ngModel)]="course.description" name="description" placeholder="Beschreibung">
-      </div>
-    </div>
-  </form>
-</div>
-

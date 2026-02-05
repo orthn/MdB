@@ -20,13 +20,10 @@ export class LeaderboardComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private userService: UserService,
-    private router: Router,
     private toast: ToastService) {
   }
 
   ngOnInit(): void {
-    //this.userService.checkIfUserIsAllowedAndReroute()
     this.loadLeaderboard()
   }
 

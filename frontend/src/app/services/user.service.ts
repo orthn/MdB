@@ -1,82 +1,83 @@
 import {Injectable} from '@angular/core';
 import {UserSettings} from '../models/User';
 import {Router} from '@angular/router';
+import {jwtDecode} from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userKey = 'currentUser';
-  private jwtToken = 'jwtToken';
+  private tokenKey = 'jwtToken';
 
   constructor(private router: Router) {}
 
-  setUser(user: any): void {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
-  }
-
-  getUser(): any | null {
-    const user = localStorage.getItem(this.userKey);
-
-    if (!user || user === 'undefined') {
-      return null;
-    }
-
-    return JSON.parse(user);
-  }
-
-  isTeacher(): boolean {
-    if (!this.getUser()) {
-      return false;
-    }
-
-    return this.getUser().isTeacher;
-  }
-
-  clearUser(): void {
-    localStorage.removeItem(this.userKey);
-  }
-
+  // ==============================
+  // TOKEN
+  // ==============================
   saveToken(token: string): void {
-    localStorage.setItem(this.jwtToken, token);
+    localStorage.setItem(this.tokenKey, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.jwtToken);
+    return localStorage.getItem(this.tokenKey);
   }
 
   removeToken(): void {
-    localStorage.removeItem(this.jwtToken);
+    localStorage.removeItem(this.tokenKey);
   }
 
+  // ==============================
+  // USER (decoded from JWT)
+  // ==============================
+  getUser(): any | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      if (decoded.exp * 1000 < Date.now()) {
+        this.logout();
+        return null;
+      }
+      return decoded;
+    } catch {
+      this.logout();
+      return null;
+    }
+  }
+
+  // ==============================
+  // AUTH STATE
+  // ==============================
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
 
-  logout(): void {
-    this.clearUser();
-    this.removeToken();
+  isTeacher(): boolean {
+    return this.getUser()?.role === 'teacher';
   }
 
+  // ==============================
+  // LOGOUT
+  // ==============================
+  logout(): void {
+    this.removeToken();
+    this.router.navigate(['/login']);
+  }
+
+  // ==============================
+  // SETTINGS
+  // ==============================
   applySettings(settings: UserSettings): void {
     const user = this.getUser()
     user.settings.showAnimations = settings?.showAnimations ?? true;
     user.settings.showHints = settings?.showHints ?? true;
+    user.settings.theme = settings?.theme ?? 'dark';
 
     if (user.settings.showAnimations) {
       document.body.classList.remove('no-animations');
     } else {
       document.body.classList.add('no-animations');
-    }
-    this.setUser(user);
-  }
-
-  public checkIfUserIsAllowedAndReroute() {
-    if (!this.getUser().isLoggedIn()) {
-      this.router.navigate(['/login']);
-    }
-    if (this.getUser().isTeacher()) {
-      this.router.navigate(['/dashboard']);
     }
   }
 }

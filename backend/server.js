@@ -9,6 +9,7 @@ const challenges = require('./routes/challengesRouter');
 const progress = require('./routes/progressRouter');
 const leaderboard = require('./routes/leaderboardRouter');
 const seed = require('./routes/seedRouter');
+const statistics = require('./routes/statisticsRouter');
 const helpers = require("./services/helper");
 
 const bodyParser = require("express");
@@ -57,4 +58,5 @@ app.use('/progress', progress);
 app.use('/classes', classes);
 app.use('/leaderboard', leaderboard);
 app.use('/challenges', challenges);
+app.use('/statistics', statistics);
 

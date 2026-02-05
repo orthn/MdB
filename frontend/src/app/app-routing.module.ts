@@ -13,27 +13,38 @@ import {StatisticsComponent} from './statistics/statistics.component';
 import {SettingsComponent} from './settings/settings.component';
 import {LevelComponent} from './level/level.component';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
+import {AuthGuard} from './guards/auth.guard';
+import {RoleGuard} from './guards/role.guard';
+import {AdminStatisticsComponent} from './admin-dashboard/admin-statistics/admin-statistics.component';
 
 const routes: Routes = [
+  // PUBLIC ROUTES
   {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent},
-  {path: 'dashboard', component: AdminDashboardComponent},
-  {path: 'dashboard/createClass', component: CreateClassComponent},
-  {path: 'dashboard/editClass/:classId', component: EditClassComponent},
-  {path: 'dashboard', component: AdminDashboardComponent},
-  {path: 'dashboard/createStudent', component: CreateStudentComponent},
-  {path: 'dashboard/editStudent/:studentId', component: EditStudentComponent}, // pass id as param
   {path: 'login', component: LoginComponent},
-  {path: 'achievements', component: AchievementsComponent},
-  {path: 'statistics', component: StatisticsComponent},
-  {path: 'settings', component: SettingsComponent},
-  {path: 'level/:id', component: LevelComponent},
-  {path: 'leaderboard', component: LeaderboardComponent},
-  {path: '**', redirectTo: ''}
+
+  // TEACHER ONLY
+  {path: 'dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+  {path: 'dashboard/createClass', component: CreateClassComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+  {path: 'dashboard/editClass/:classId', component: EditClassComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+  {path: 'dashboard/createStudent', component: CreateStudentComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+  {path: 'dashboard/editStudent/:studentId', component: EditStudentComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}}, // pass id as param
+  {path: 'admin-statistics', component: AdminStatisticsComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+  {path: 'admin-statistics/:studentId', component: AdminStatisticsComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher']}},
+
+  // STUDENT ONLY
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['teacher', 'student']}},
+  {path: 'achievements', component: AchievementsComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['student']}},
+  {path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['student']}},
+  {path: 'settings', component: SettingsComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['student']}},
+  {path: 'level/:id', component: LevelComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['student']}},
+  {path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['student']}},
+
+  // PUBLIC WILDCARD
+  {path: '**', redirectTo: '', }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
+  imports: [RouterModule.forRoot(routes, {enableTracing: true, enableViewTransitions: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

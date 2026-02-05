@@ -16,7 +16,7 @@ export class CreateStudentComponent {
   icons = ICONS;
   user: User = {
     firstName: '', gender: 'male', isLocked: false, isTeacher: false, lastName: '', password: '', username: '',
-    settings: {showHints: false, showAnimations: false}
+    settings: {showHints: false, showAnimations: false, theme: "light"}
   }
 
   constructor(private api: ApiService, private toast: ToastService) {

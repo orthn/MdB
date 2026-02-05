@@ -50,6 +50,12 @@
             Dashboard
           </a>
         </li>
+        <li class="nav-item mb-2" *ngIf="userService.isTeacher()">
+          <a routerLink="/admin-statistics" routerLinkActive="active" class="nav-link text-white">
+            <fa-icon [icon]="icons.TROPHY" class="me-2"></fa-icon>
+            Statistiken
+          </a>
+        </li>
       </ng-container>
       <!-- Visible only when NOT logged in -->
       <ng-container *ngIf="!userService.isLoggedIn()">
@@ -77,7 +83,7 @@
         <strong>{{ userService.getUser()?.firstName || 'User' }}</strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li>
+        <li  *ngIf="!userService.isTeacher() && userService.isLoggedIn()" >
           <a class="dropdown-item pointer" href="/settings">
             <fa-icon [icon]="icons.SLIDERS" class="me-2"></fa-icon>
             Einstellungen
