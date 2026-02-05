@@ -23,12 +23,6 @@ export class AchievementsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.userService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-    }
-    if (this.userService.isTeacher()) {
-      this.router.navigate(['/dashboard']);
-    }
     this.loadAchievements()
   }
 

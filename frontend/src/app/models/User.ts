@@ -13,4 +13,5 @@ export class User {
 export interface UserSettings {
   showHints: boolean;
   showAnimations: boolean;
+  theme: 'light' | 'dark' | 'system';
 }
