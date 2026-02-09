@@ -5,6 +5,7 @@ import {ApiService} from '../../services/api.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastService} from '../../services/toast.service';
 import {UserService} from '../../services/user.service';
+import {User} from '../../models/User';
 
 @Component({
   selector: 'app-edit-class',
@@ -15,6 +16,9 @@ import {UserService} from '../../services/user.service';
 export class EditClassComponent implements OnInit {
   protected readonly icons = ICONS;
   protected course: Course = {description: '', name: ''}
+  protected students: User[] = [];
+
+  protected selectedStudentIds: string[] = [];
 
   constructor(
     private api: ApiService,
@@ -30,7 +34,16 @@ export class EditClassComponent implements OnInit {
     } else if (!this.userService.isTeacher()) {
       this.router.navigate(['/home']);
     }
+    this.loadStudents()
     this.loadCourse()
+  }
+
+  private loadStudents(): void {
+    this.api.getAllUsers().subscribe({
+      next: (students: User[]) => {
+        this.students = students;
+      }
+    })
   }
 
   private loadCourse(): void {
@@ -39,6 +52,7 @@ export class EditClassComponent implements OnInit {
       this.api.getCourseById(this.course._id).subscribe({
         next: (course: Course) => {
           this.course = course
+          this.selectedStudentIds = course.students?.map((s: any) => s._id || s) || [];
         },
         error: () => {
           this.toast.show("Klasse konnte nicht geladen werden.", "error");
@@ -48,7 +62,13 @@ export class EditClassComponent implements OnInit {
   }
 
   protected save() {
-    this.api.updateCourse(this.course).subscribe({
+    if (!this.course?._id) return;
+    const payload: Course = {
+      ...this.course,
+      students: this.selectedStudentIds.map(String)
+    };
+
+    this.api.updateCourse(payload).subscribe({
       next: () => {
         this.toast.show("Änderungen gespeichert!", "success");
         this.router.navigate(['/dashboard']);
@@ -56,6 +76,6 @@ export class EditClassComponent implements OnInit {
       error: () => {
         this.toast.show("Fehler beim speichern der Änderungen", "error");
       }
-    })
+    });
   }
 }

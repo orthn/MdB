@@ -114,7 +114,7 @@ export class AdminDashboardComponent implements OnInit {
     this.api.addStudentToCourse(classId, student._id!)
       .subscribe({
         next: () => {
-          this.toast.show(`${student.firstName} wurde zur Klasse hinzugefügt`,'success');
+          this.toast.show(`${student.firstName} wurde zur Klasse hinzugefügt`, 'success');
           this.loadCourses();
         },
         error: () => {
@@ -127,7 +127,7 @@ export class AdminDashboardComponent implements OnInit {
     this.api.removeStudentFromCourse(classId, student._id!)
       .subscribe({
         next: () => {
-          this.toast.show(`${student.firstName} wurde aus Klasse entfernt`,'success');
+          this.toast.show(`${student.firstName} wurde aus Klasse entfernt`, 'success');
           this.loadCourses();
         },
         error: () => {

@@ -65,7 +65,7 @@ export class ApiService {
   }
 
   updateCourse(course: Course) {
-    return this.http.put(`${this.baseUrl}${this.classes}/${course._id}/update`, course);
+    return this.http.put<Course>(`${this.baseUrl}${this.classes}/${course._id}`, course);
   }
 
   addStudentToCourse(classId: string, studentId: string) {

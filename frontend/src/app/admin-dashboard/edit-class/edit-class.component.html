@@ -39,6 +39,15 @@
           <input type="text" class="form-control" [(ngModel)]="course.description" name="description"
                  placeholder="Beschreibung">
         </div>
+
+        <div class="col-lg-12 col-sm-12">
+          <label class="form-label">Schüler hinzufügen</label>
+          <select class="form-select" [(ngModel)]="selectedStudentIds" name="students" multiple>
+            <option *ngFor="let student of students" [ngValue]="student._id">
+              {{ student.firstName }} {{ student.lastName }}
+            </option>
+          </select>
+        </div>
       </div>
     </form>
   </div>

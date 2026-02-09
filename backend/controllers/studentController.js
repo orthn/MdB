@@ -100,7 +100,7 @@ const resetPassword = async (req, res) => {
 
 const getStudents = async (req, res) => {
     try {
-        const students = await User.find({role: 'student'}).select('-password');
+        const students = await User.find({role: 'student'});
         return res.status(200).json(students)
     } catch (error) {
         return res.status(400).send({message: 'Failed to retrieve students', error});

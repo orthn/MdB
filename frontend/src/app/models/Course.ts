@@ -5,6 +5,5 @@ export class Course {
   _id?: string;
   name!: string;
   description!: string;
-  students?: User[];
-  teachers?: Teacher[];
+  students?: (User | string)[];
 }

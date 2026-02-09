@@ -113,25 +113,36 @@ const getClassById = async (req, res) => {
 
 const updateClass = async (req, res) => {
     try {
-        const id = req.params.id;
+        const { id } = req.params;
 
         if (!id) {
             return res.status(400).json({message: 'Missing class ID'});
         }
 
-        const course = await Class.findById({_id: id});
-        if (!course) {
-            return res.status(404).json({message: 'Student not found'});
+        const updateData = {};
+        const { name, description, students } = req.body;
+
+        if (name !== undefined) updateData.name = name;
+        if (description !== undefined) updateData.description = description;
+
+        if (students !== undefined) {
+            updateData.students = Array.isArray(students) ? students : [];
         }
 
-        const {name, description, students} = req.body;
-        if (name !== undefined) course.name = name;
-        if (description !== undefined) course.description = description;
-        if (students !== undefined) course.students = students;
+        const updatedClass = await Class.findByIdAndUpdate(id, updateData,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
 
-        await course.save();
+        if (!updatedClass) {
+            return res.status(404).json({
+                message: 'Class not found'
+            });
+        }
 
-        res.status(200).json({message: `Class "${course.name}" updated successfully`});
+        res.status(200).json(updatedClass);
     } catch (error) {
         res.status(500).json({message: 'Failed to update class', error});
     }

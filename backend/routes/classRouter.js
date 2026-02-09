@@ -13,7 +13,7 @@ router.get('/:id/students', getUsersOfClass)
 
 router.post('/create', createClass);
 
-router.put('/:id/update', updateClass);
+router.put('/:id', updateClass);
 
 // add student to class
 router.post('/add-student', addStudentToClass);
