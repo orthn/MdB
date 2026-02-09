@@ -4,6 +4,7 @@ import {ApiService} from '../../services/api.service';
 import {ToastService} from '../../services/toast.service';
 import {ActivatedRoute} from '@angular/router';
 import {Statistics} from '../../models/Statistics';
+import {User} from '../../models/User';
 
 @Component({
   selector: 'app-admin-statistics',
@@ -22,6 +23,8 @@ export class AdminStatisticsComponent implements OnInit {
   // loading indicator
   protected loading: boolean = true;
 
+  protected user?: User;
+
   constructor(
     private api: ApiService,
     private toast: ToastService,
@@ -29,10 +32,19 @@ export class AdminStatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.route.snapshot.paramMap.get('studentId')) {
-      const userId: string = String(this.route.snapshot.paramMap.get('studentId'));
-      this.loadStatistics(userId);
-    }
+    const userId = this.route.snapshot.paramMap.get('studentId');
+    if (!userId) return;
+
+    this.loadUser(userId)
+    this.loadStatistics(userId)
+  }
+
+  private loadUser(userId: string): void {
+    this.api.getUserById(userId).subscribe({
+      next: user => this.user = user,
+      error: () =>
+        this.toast.show('Benutzer konnte nicht geladen werden', 'error')
+    });
   }
 
   private loadStatistics(userId: string): void {
@@ -46,5 +58,18 @@ export class AdminStatisticsComponent implements OnInit {
         this.loading = false;
       }
     })
+  }
+
+  get performance(): string {
+    if (!this.statistics.totalAttempts || !this.statistics.totalCompletedLevels ) return 'Keine Daten';
+    const avg =
+      this.statistics.totalAttempts /
+      this.statistics.totalCompletedLevels;
+
+    if (avg <= 1.5) return 'Exzellent';
+    if (avg <= 3) return 'Gut';
+    if (avg <= 5) return 'Durchschnittlich';
+
+    return 'Auffällig';
   }
 }

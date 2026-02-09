@@ -2,57 +2,110 @@
   { label: 'Statistiken', url: '/admin-statistics' },
 ]"></app-breadcrumb>
 
-<div class="text-white">
-  <h2 class="title">
-    <fa-icon [icon]="icons.TROPHY" class="me-1"></fa-icon>
-    Statistiken
+<div class="admin-stats text-white">
+
+  <h2 class="mb-4">
+    <fa-icon [icon]="icons.TROPHY" class="me-2"></fa-icon>
+    Benutzerstatistik
   </h2>
 
   <!-- Loading -->
-  <div *ngIf="loading" class="loading text-muted">
+  <div *ngIf="loading" class="text-muted">
     Bitte Account auswählen
   </div>
 
-  <!-- Empty -->
-  <div *ngIf="!loading && statistics.totalCompletedLevels ===  0" class="text-muted">
-    Für den Account gibt es keine Statistiken
-    <br>
-    Mindestens ein Level muss gespielt und abgeschlossen werden
+  <!-- Header -->
+  <div *ngIf="!loading && user" class="user-header mb-4">
+    <div class="user-name">
+      {{ user.firstName }} {{ user.lastName }}
+    </div>
+
+    <div class="user-meta">
+    <span class="badge bg-secondary"> student</span>
+      <span *ngIf="user.isLocked" class="badge bg-danger">
+        Gesperrt
+      </span>
+
+      <span class="badge bg-success">{{ performance }}</span>
+    </div>
   </div>
 
-  <div *ngIf="!loading && statistics.totalCompletedLevels && statistics.totalCompletedLevels >= 0">
-    <table class="table table-dark table-hover">
+  <!-- Empty -->
+  <div *ngIf="!loading && statistics.totalCompletedLevels === 0"
+       class="alert alert-info text-muted">
+    Keine Statistiken vorhanden.
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="kpi-grid"
+       *ngIf="!loading && statistics.totalAttempts && statistics.totalCompletedLevels && statistics.totalCompletedLevels > 0">
+
+    <div class="kpi">
+      <div class="kpi-value">{{ statistics.totalAttempts }}</div>
+      <div class="kpi-label">Versuche</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-value">{{ statistics.totalCompletedLevels }}</div>
+      <div class="kpi-label">Abgeschlossene Level</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-value">
+        {{ statistics.totalAttempts / statistics.totalCompletedLevels | number:'1.1-1' }}
+      </div>
+      <div class="kpi-label">Ø Versuche / Level</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-value text-success">
+        {{ statistics.xp }}
+      </div>
+      <div class="kpi-label">Gesamt XP</div>
+    </div>
+
+  </div>
+
+
+  <!-- Challenge Table -->
+  <div *ngIf="statistics.totalCompletedLevels && statistics.totalCompletedLevels > 0"
+       class="table-responsive mt-4">
+
+    <table class="table table-dark table-striped align-middle">
       <thead>
       <tr>
-        <th>Gespielte Level</th>
-        <th>Komplettierte Level</th>
+        <th>Challenge</th>
+        <th>Fortschritt</th>
+        <th>Abgeschlossen</th>
       </tr>
       </thead>
+
       <tbody>
-      <tr>
-        <td>{{ statistics.totalAttempts }}</td>
-        <td>{{ statistics.totalCompletedLevels }}</td>
+      <tr *ngFor="let challenge of statistics.levelsPerChallenge">
+
+        <td style="width: 30%">
+          {{ challenge.title }}
+        </td>
+
+        <td style="width: 50%">
+          <div class="progress admin-progress">
+            <div class="progress-bar"
+                 role="progressbar"
+                 [style.width.%]="challenge.total
+                 ? (challenge.completed / challenge.total) * 100
+                 : 0">
+            </div>
+          </div>
+        </td>
+
+        <td>
+          {{ challenge.completed }} / {{ challenge.total }}
+        </td>
+
       </tr>
       </tbody>
     </table>
 
-    <div class="challenge-row" *ngFor="let challenge of statistics.levelsPerChallenge">
-      <!-- Challenge Name -->
-      <span class="challenge-name">
-      {{ challenge.title }}
-    </span>
-
-      <!-- Progress Bar -->
-      <div class="bar">
-        <div class="fill" [style.width.%]="challenge.total ? (challenge.completed / challenge.total) * 100: 0">
-        </div>
-      </div>
-
-      <!-- Completed / Total -->
-      <span class="challenge-count">
-      {{ challenge.completed }} / {{ challenge.total }}
-    </span>
-
-    </div>
   </div>
+
 </div>
