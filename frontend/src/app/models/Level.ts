@@ -1,4 +1,4 @@
-export type LevelMode = 'code' | 'blocks'
+export type LevelMode = 'code' | 'blocks' | 'mathematics'
 
 export class Level {
   _id?: string
@@ -6,11 +6,13 @@ export class Level {
   title!: string
   description!: string
   starterBlocks?: string[]
-  starterCode?: string        // initial code for the user
-  expectedOutput?: string     // expected output for validation
-  hints?: Hint[]              // optional hints for the level
-  solutions?: Solution[]      // multiple possible solutions
-  order!: number              // order in the challenge
+  starterCode?: string
+  expectedOutput?: string
+  expectedAnswer?: string        // ← neu für mathematics
+  choices?: string[]             // ← neu: wenn gesetzt → Auswahl statt Freitext
+  hints?: Hint[]
+  solutions?: Solution[]
+  order!: number
   difficulty!: 'easy' | 'medium' | 'hard'
   isActive!: boolean
   isCompleted?: boolean
@@ -19,13 +21,13 @@ export class Level {
 
 export interface Hint {
   text: string
-  order?: number // optional ordering
+  order?: number
 }
 
 export interface Solution {
-  mode: 'code' | 'blocks'   // can be 'code' or 'blocks'
-  code?: string             // code solution (optional if blocks)
-  isCorrect?: boolean        // true if this is a correct solution
-  explanation?: string      // optional explanation for wrong solutions
+  mode: 'code' | 'blocks'
+  code?: string
+  isCorrect?: boolean
+  explanation?: string
   feedback?: string
 }

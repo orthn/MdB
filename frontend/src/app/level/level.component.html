@@ -43,6 +43,36 @@
       (codeChange)="userCode = $event">
     </app-block-editor>
 
+    <!-- MATHEMATICS -->
+    <div *ngIf="level.mode === 'mathematics'" class="mathematics-input">
+
+      <!-- Freitext-Eingabe (kein choices) -->
+      <ng-container *ngIf="!level.choices?.length">
+        <label class="math-label">Deine Antwort:</label>
+        <input
+          type="text"
+          class="form-control math-answer-input"
+          [(ngModel)]="userCode"
+          placeholder="Gib deine Antwort ein…"
+          (keydown.enter)="submit()">
+      </ng-container>
+
+      <!-- Auswahl (choices vorhanden) -->
+      <ng-container *ngIf="level.choices?.length">
+        <label class="math-label">Wähle die richtige Antwort:</label>
+        <div class="math-choices">
+          <button
+            *ngFor="let choice of level.choices"
+            class="btn math-choice-btn"
+            [class.selected]="userCode === choice"
+            (click)="userCode = choice">
+            {{ choice }}
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+
   </section>
 
   <!-- SUPPORT -->

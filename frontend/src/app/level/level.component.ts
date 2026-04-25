@@ -76,15 +76,39 @@ export class LevelComponent implements OnInit {
   }
 
   protected submit() {
-    if (!this.level.solutions) return
-
     this.submitting = true
     this.feedback = null
 
-    // Normalize user input
-    const normalizedCode: string = this.normalizeCode(this.userCode.trim())
+    // ── MATHEMATICS ──────────────────────────────────────────
+    if (this.level.mode === 'mathematics') {
+      const correct =
+        this.userCode.trim().toLowerCase() ===
+        this.level.expectedAnswer?.trim().toLowerCase()
 
-    // Find matching solution for the current mode
+      if (correct) {
+        this.api.updateUserProgress(this.userProgress).subscribe({
+          next: () => {
+            this.showCelebration()
+            this.feedback = 'Super! Richtig gerechnet! 🎉'
+            this.toast.show(this.feedback, 'success')
+            setTimeout(() => this.router.navigate(['/home']), this.animationDuration)
+          },
+          error: () => this.toast.show('Fehler beim Speichern des Fortschritts', 'error')
+        })
+      } else {
+        this.feedback = 'Leider falsch – versuch es nochmal!'
+        this.toast.show(this.feedback, 'error')
+      }
+
+      this.submitting = false
+      return
+    }
+
+    // ── CODE / BLOCKS ─────────────────────────────────────────
+    if (!this.level.solutions) return
+
+    const normalizedCode = this.normalizeCode(this.userCode.trim())
+
     const matchedSolution = this.level.solutions.find(s => {
       if (s.mode !== this.level.mode) return false
       return this.normalizeCode(s.code) === normalizedCode
@@ -96,27 +120,20 @@ export class LevelComponent implements OnInit {
           this.showCelebration()
           this.feedback = matchedSolution.feedback ?? 'Super! Level abgeschlossen 🎉'
           this.toast.show(this.feedback, 'success')
-
-          setTimeout(() => {
-            this.router.navigate(['/home'])
-          }, this.animationDuration)
+          setTimeout(() => this.router.navigate(['/home']), this.animationDuration)
         },
-        error: err => {
-          this.toast.show('Fehler beim Speichern des Fortschritts', 'error')
-        }
+        error: () => this.toast.show('Fehler beim Speichern des Fortschritts', 'error')
       })
     } else if (matchedSolution) {
-      // Show its explanation/feedback
       this.feedback = matchedSolution.feedback ?? matchedSolution.explanation ?? 'Ohje, das war leider nicht richtig. Versuch es nochmal!'
       this.toast.show(this.feedback, 'error')
     } else {
-      // If no match, display generic error
       this.feedback = this.level.mode === 'blocks'
-        ? 'Achte auf die Reigenfolge!'
+        ? 'Achte auf die Reihenfolge!'
         : 'Ohje, das war leider nicht richtig. Versuch es nochmal!'
-
       this.toast.show(this.feedback, 'error')
     }
+
     this.submitting = false
   }
 

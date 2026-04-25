@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const {seed} = require("../controllers/seedController");
+const {programming, mathematics} = require("../controllers/seedController");
 
-router.post('/', seed);
+router.post('/programming', programming);
+router.post('/mathematics', mathematics)
 
 module.exports = router;

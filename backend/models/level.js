@@ -16,11 +16,13 @@ const levelSchema = new mongoose.Schema({
     challengeId: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true},
     title: String,
     description: String,
-    mode: {type: String, enum: ['code', 'blocks'], required: true},
+    mode: { type: String, enum: ['code', 'blocks', 'mathematics'], required: true },
     starterCode: {type: String, default: ''},           // FOR TEXT BASED LEVELS
     blocklyBlocks: {type: Object, default: null},       // FOR FUTURE INTEGRATION OF BLOCKLY
     starterBlocks: {type: [String], default: null},     // FOR BLOCK BASED LEVELS
     expectedOutput: String,
+    expectedAnswer: { type: String, default: null },   // für mathematics
+    choices: { type: [String], default: null },        // für mathematics
     hints: [hintSchema],
     order: Number,
     isActive: Boolean,
@@ -30,8 +32,15 @@ const levelSchema = new mongoose.Schema({
         default: 10
     },
     solutions: {
-        type: [solutionSchema], validate: {
-            validator: sols => sols.some(s => s.isCorrect), message: 'Zumindest eine richtige Antwort ist erforderlich'
+        type: [solutionSchema],
+        default: [],
+        validate: {
+            validator: function(sols) {
+                // mathematics-Levels brauchen keine solutions
+                if (this.mode === 'mathematics') return true;
+                return sols.some(s => s.isCorrect);
+            },
+            message: 'Zumindest eine richtige Antwort ist erforderlich'
         }
     }
 }, {timestamps: true});
