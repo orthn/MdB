@@ -68,7 +68,7 @@ export class LevelComponent implements OnInit {
 
         this.loading = false
       },
-      error: err => {
+      error: () => {
         this.toast.show('Level konnte nicht geladen werden', 'error')
         this.loading = false
       }
