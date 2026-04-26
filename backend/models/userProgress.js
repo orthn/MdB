@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const userProgressSchema = new mongoose.Schema({
-    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true},
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     challengeId: {type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true, index: true},
     levelId: {type: mongoose.Schema.Types.ObjectId, ref: 'Level', required: true, index: true},
     completed: {type: Boolean, default: false},
     attempts: {type: Number, default: 0},
     completedAt: {type: Date},
+    attempts: { type: Number, default: 1 },
     xpEarned: {type: Number,default: 0}
 }, {timestamps: true});
 

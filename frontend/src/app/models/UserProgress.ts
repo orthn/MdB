@@ -7,7 +7,7 @@ export class UserProgress {
   levelId!: string;
 
   completed!: boolean;
-  attempts!: number;
+  attempts: number = 1
   completedAt?: string; // ISO date from backend
 
   createdAt?: string;

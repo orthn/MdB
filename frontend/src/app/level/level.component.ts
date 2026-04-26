@@ -29,7 +29,7 @@ export class LevelComponent implements OnInit {
   protected usedHints: number[] = []
   protected feedback: string | null = null
   protected submitting = false
-  protected animationDuration: number = 1500
+  protected readonly animationDuration: number = 500
 
   constructor(
     private api: ApiService,
@@ -97,6 +97,7 @@ export class LevelComponent implements OnInit {
         })
       } else {
         this.feedback = 'Leider falsch – versuch es nochmal!'
+        this.userProgress.attempts++
         this.toast.show(this.feedback, 'error')
       }
 
@@ -131,6 +132,7 @@ export class LevelComponent implements OnInit {
       this.feedback = this.level.mode === 'blocks'
         ? 'Achte auf die Reihenfolge!'
         : 'Ohje, das war leider nicht richtig. Versuch es nochmal!'
+      this.userProgress.attempts++
       this.toast.show(this.feedback, 'error')
     }
 

@@ -235,7 +235,9 @@ const programming = async (req, res) => {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MATHEMATICS  (Klasse 5–6 / Alter 10–12)
+// MATHEMATICS  –  4. Klasse Volksschule Österreich
+// Lehrplan: Zahlenraum bis 1.000.000, Grundrechenarten (schriftlich),
+//           Maße & Einheiten, Geometrie (Umfang/Fläche), Brüche, Sachaufgaben
 // ─────────────────────────────────────────────────────────────────────────────
 const mathematics = async (req, res) => {
     try {
@@ -243,271 +245,262 @@ const mathematics = async (req, res) => {
         await Level.deleteMany({});
 
         // ══════════════════════════════════════════════════════════════════════
-        // 1. GRUNDRECHENARTEN
+        // 1. ZAHLENRAUM BIS 1.000.000
         // ══════════════════════════════════════════════════════════════════════
-        const basics = await Challenge.create({
-            title: 'Grundrechenarten',
-            principle: 'Addition & Subtraktion',
-            description: 'Lerne Plus und Minus mit größeren Zahlen',
+        const zahlenraum = await Challenge.create({
+            title: 'Zahlen bis 1 000 000',
+            principle: 'Zahlenraum & Stellenwerte',
+            description: 'Lerne große Zahlen lesen, schreiben und verstehen',
             order: 1,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: basics._id,
-                title: 'Addition',
-                description: 'Rechne: 347 + 256 = ?',
+                // Rechenaufgabe – Freitext
+                challengeId: zahlenraum._id,
+                title: 'Stellenwerte kennen',
+                description: 'Welchen Wert hat die Ziffer 7 in der Zahl 374.816?',
                 mode: 'mathematics',
-                expectedAnswer: '603',
-                hints: [{text: 'Addiere zuerst die Einer: 7 + 6 = 13, schreibe 3, merke dir 1', order: 1}],
+                expectedAnswer: '70000',
+                hints: [
+                    { text: 'Zähle die Stellen von rechts: Einer, Zehner, Hunderter, Tausender, Zehntausender …', order: 1 },
+                    { text: 'Die 7 steht an der 5. Stelle von rechts → Zehntausender', order: 2 },
+                ],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: basics._id,
-                title: 'Subtraktion',
-                description: 'Rechne: 500 - 183 = ?',
+                // Single Choice
+                challengeId: zahlenraum._id,
+                title: 'Zahl richtig lesen',
+                description: 'Wie lautet die Zahl 506.030 in Worten?',
                 mode: 'mathematics',
-                expectedAnswer: '317',
-                hints: [{text: 'Nutze den Ergänzungsweg: 183 + ? = 500', order: 1}],
+                expectedAnswer: 'Fünfhundertsechstausend dreißig',
+                choices: [
+                    'Fünfhundertsechstausend dreißig',
+                    'Fünftausend sechshundert dreißig',
+                    'Fünfhundertsechzig dreißig',
+                    'Fünfhundertsechstausend dreihundert',
+                ],
+                hints: [{ text: '506.030 → 506 Tausend und 030', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: basics._id,
-                title: 'Rechenzeichen bestimmen',
-                description: 'Welches Zeichen macht die Rechnung richtig? 15 __ 8 = 7',
+                // Rechenaufgabe – Freitext
+                challengeId: zahlenraum._id,
+                title: 'Zahlen runden',
+                description: 'Runde 483.726 auf die nächste Tausenderstelle.',
                 mode: 'mathematics',
-                expectedAnswer: '-',
-                choices: ['+', '-', '×', '÷'],
-                hints: [{text: 'Du musst von 15 auf 7 kommen', order: 1}],
+                expectedAnswer: '484000',
+                hints: [{ text: 'Schau auf die Hunderterstelle: 7 ≥ 5, also wird aufgerundet.', order: 1 }],
                 order: 3,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: basics._id,
-                title: 'Textaufgabe',
-                description: 'In der Schule sind 348 Schüler. 127 sind krank. Wie viele sind anwesend?',
+                // Textaufgabe – Freitext
+                challengeId: zahlenraum._id,
+                title: 'Größte & kleinste Zahl',
+                description: 'Welche ist die größte Zahl? 98.765 oder 102.340 oder 99.999?',
                 mode: 'mathematics',
-                expectedAnswer: '221',
-                hints: [{text: 'Anwesend = Gesamt − Krank', order: 1}],
+                expectedAnswer: '102340',
+                choices: ['98765', '99999', '102340'],
+                hints: [{ text: 'Vergleiche zuerst die Anzahl der Stellen!', order: 1 }],
                 order: 4,
-                difficulty: 'medium',
-                xpReward: 15,
+                difficulty: 'easy',
+                xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: basics._id,
-                title: 'Ergebnis schätzen',
-                description: 'Welches Ergebnis ist ungefähr richtig für 198 + 203?',
+                // Textaufgabe
+                challengeId: zahlenraum._id,
+                title: 'Zahlen der Reihe nach',
+                description: 'Ein Stadion fasst 47.500 Personen. Beim Spiel sind 38.260 Zuschauer da. Wie viele Plätze sind noch frei?',
                 mode: 'mathematics',
-                expectedAnswer: '400',
-                choices: ['200', '300', '400', '500'],
-                hints: [{text: 'Runde beide Zahlen auf Hundert', order: 1}],
+                expectedAnswer: '9240',
+                hints: [
+                    { text: 'Freie Plätze = Gesamtplätze − anwesende Zuschauer', order: 1 },
+                    { text: '47.500 − 38.260 = ?', order: 2 },
+                ],
                 order: 5,
-                difficulty: 'easy',
-                xpReward: 5,
+                difficulty: 'medium',
+                xpReward: 15,
                 isActive: true,
             },
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 2. MULTIPLIKATION & DIVISION
+        // 2. SCHRIFTLICHE ADDITION & SUBTRAKTION
         // ══════════════════════════════════════════════════════════════════════
-        const mulDiv = await Challenge.create({
-            title: 'Multiplikation & Division',
-            principle: 'Mal- und Geteiltrechnen',
-            description: 'Übe das Einmaleins und einfache Division',
+        const addSub = await Challenge.create({
+            title: 'Addition & Subtraktion',
+            principle: 'Schriftliches Rechnen',
+            description: 'Übe das schriftliche Addieren und Subtrahieren großer Zahlen',
             order: 2,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: mulDiv._id,
-                title: 'Einmaleins',
-                description: 'Rechne: 7 × 8 = ?',
+                // Rechenaufgabe
+                challengeId: addSub._id,
+                title: 'Schriftlich addieren',
+                description: 'Rechne: 34.768 + 25.493 = ?',
                 mode: 'mathematics',
-                expectedAnswer: '56',
-                hints: [{text: '7 × 8 = 7 × 4 × 2 = 28 × 2', order: 1}],
+                expectedAnswer: '60261',
+                hints: [{ text: 'Schreibe die Zahlen untereinander und addiere Stelle für Stelle von rechts.', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: mulDiv._id,
-                title: 'Welches Ergebnis ist richtig?',
-                description: '9 × 6 = ?',
+                // Rechenaufgabe
+                challengeId: addSub._id,
+                title: 'Schriftlich subtrahieren',
+                description: 'Rechne: 73.204 − 28.567 = ?',
                 mode: 'mathematics',
-                expectedAnswer: '54',
-                choices: ['45', '54', '63', '48'],
-                hints: [{text: '9 × 6 = 10 × 6 − 6 = 60 − 6', order: 1}],
+                expectedAnswer: '44637',
+                hints: [{ text: 'Vergiss nicht den Übertrag (Borgen), wenn eine Stelle nicht reicht.', order: 1 }],
                 order: 2,
-                difficulty: 'easy',
-                xpReward: 5,
+                difficulty: 'medium',
+                xpReward: 10,
                 isActive: true,
             },
             {
-                challengeId: mulDiv._id,
-                title: 'Division mit Rest',
-                description: 'Rechne: 29 ÷ 4 = ? Rest ?  (Schreibe z.B. 7 R 1)',
+                // Textaufgabe
+                challengeId: addSub._id,
+                title: 'Schulausflug',
+                description: 'Die Schule hat 12.500 € Budget. Für den Bus werden 1.840 € bezahlt, für den Eintritt 3.275 €. Wie viel Geld bleibt übrig?',
                 mode: 'mathematics',
-                expectedAnswer: '7 R 1',
-                hints: [{text: '4 × 7 = 28, also bleibt 1 übrig', order: 1}],
+                expectedAnswer: '7385',
+                hints: [
+                    { text: 'Erst alle Ausgaben zusammenrechnen: 1.840 + 3.275', order: 1 },
+                    { text: 'Dann vom Budget abziehen: 12.500 − Ausgaben', order: 2 },
+                ],
                 order: 3,
                 difficulty: 'medium',
-                xpReward: 10,
+                xpReward: 15,
                 isActive: true,
             },
             {
-                challengeId: mulDiv._id,
-                title: 'Multiplikation mit Zehnern',
-                description: 'Rechne: 24 × 30 = ?',
+                // Single Choice – Überschlag
+                challengeId: addSub._id,
+                title: 'Ergebnis schätzen',
+                description: 'Welches Ergebnis ist ungefähr richtig für 49.830 + 31.150?',
                 mode: 'mathematics',
-                expectedAnswer: '720',
-                hints: [{text: '24 × 3 = 72, dann mit 10 multiplizieren', order: 1}],
+                expectedAnswer: '81000',
+                choices: ['61000', '71000', '81000', '91000'],
+                hints: [{ text: 'Runde beide Zahlen auf Tausend: 50.000 + 31.000 = ?', order: 1 }],
                 order: 4,
-                difficulty: 'medium',
-                xpReward: 10,
-                isActive: true,
-            },
-            {
-                challengeId: mulDiv._id,
-                title: 'Welche Rechnung stimmt?',
-                description: 'Was ist 72 ÷ 8?',
-                mode: 'mathematics',
-                expectedAnswer: '9',
-                choices: ['7', '8', '9', '10'],
-                hints: [{text: '8 × 9 = 72', order: 1}],
-                order: 5,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: mulDiv._id,
-                title: 'Textaufgabe',
-                description: 'Ein Karton fasst 12 Flaschen. Wie viele Kartons braucht man für 84 Flaschen?',
+                // Textaufgabe
+                challengeId: addSub._id,
+                title: 'Bücherei',
+                description: 'Eine Bücherei hat 156.430 Bücher. Es kommen 12.870 neue dazu und 9.540 werden ausgesondert. Wie viele Bücher hat die Bücherei jetzt?',
                 mode: 'mathematics',
-                expectedAnswer: '7',
-                hints: [{text: '84 ÷ 12 = ?', order: 1}],
-                order: 6,
-                difficulty: 'medium',
-                xpReward: 15,
+                expectedAnswer: '159760',
+                hints: [
+                    { text: '156.430 + 12.870 − 9.540 = ?', order: 1 },
+                ],
+                order: 5,
+                difficulty: 'hard',
+                xpReward: 25,
                 isActive: true,
             },
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 3. BRUCHRECHNUNG
+        // 3. SCHRIFTLICHE MULTIPLIKATION
         // ══════════════════════════════════════════════════════════════════════
-        const fractions = await Challenge.create({
-            title: 'Bruchrechnung',
-            principle: 'Brüche',
-            description: 'Lerne Brüche zu verstehen, vergleichen und addieren',
+        const multiplikation = await Challenge.create({
+            title: 'Multiplikation',
+            principle: 'Schriftliches Multiplizieren',
+            description: 'Multipliziere mit ein- und zweistelligen Zahlen',
             order: 3,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: fractions._id,
-                title: 'Bruch erkennen',
-                description: 'Welcher Bruch beschreibt "drei von vier gleichen Teilen"?',
+                // Rechenaufgabe
+                challengeId: multiplikation._id,
+                title: 'Mal Einmaleins',
+                description: 'Rechne: 647 × 8 = ?',
                 mode: 'mathematics',
-                expectedAnswer: '3/4',
-                choices: ['1/4', '3/4', '4/3', '3/3'],
-                hints: [{text: 'Zähler = genommene Teile, Nenner = Gesamtteile', order: 1}],
+                expectedAnswer: '5176',
+                hints: [{ text: 'Multipliziere jede Stelle mit 8 und denk an den Übertrag.', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: fractions._id,
-                title: 'Größer oder kleiner?',
-                description: 'Was ist größer: 1/2 oder 1/3?',
+                // Single Choice
+                challengeId: multiplikation._id,
+                title: 'Ergebnis wählen',
+                description: 'Was ergibt 356 × 7?',
                 mode: 'mathematics',
-                expectedAnswer: '1/2',
-                choices: ['1/2', '1/3'],
-                hints: [{text: 'Je kleiner der Nenner, desto größer der Anteil', order: 1}],
+                expectedAnswer: '2492',
+                choices: ['2392', '2492', '2592', '2342'],
+                hints: [{ text: '6×7=42, 5×7=35+4=39, 3×7=21+3=24 → 2492', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: fractions._id,
-                title: 'Brüche addieren – gleicher Nenner',
-                description: 'Rechne: 2/7 + 3/7 = ?',
+                // Textaufgabe
+                challengeId: multiplikation._id,
+                title: 'Schulbücher bestellen',
+                description: 'Eine Schule bestellt für 24 Klassen je 28 Schulbücher. Wie viele Bücher werden insgesamt bestellt?',
                 mode: 'mathematics',
-                expectedAnswer: '5/7',
-                hints: [{text: 'Gleicher Nenner → Zähler addieren, Nenner bleibt', order: 1}],
+                expectedAnswer: '672',
+                hints: [
+                    { text: '24 × 28 = ?', order: 1 },
+                    { text: '24 × 20 = 480, 24 × 8 = 192, zusammen = ?', order: 2 },
+                ],
                 order: 3,
-                difficulty: 'easy',
+                difficulty: 'medium',
+                xpReward: 15,
+                isActive: true,
+            },
+            {
+                // Rechenaufgabe – zweistelliger Multiplikator
+                challengeId: multiplikation._id,
+                title: 'Mal zweistellig',
+                description: 'Rechne: 234 × 30 = ?',
+                mode: 'mathematics',
+                expectedAnswer: '7020',
+                hints: [{ text: '234 × 3 = 702, dann × 10 (eine Null anhängen)', order: 1 }],
+                order: 4,
+                difficulty: 'medium',
                 xpReward: 10,
                 isActive: true,
             },
             {
-                challengeId: fractions._id,
-                title: 'Brüche addieren – verschiedener Nenner',
-                description: 'Rechne: 1/2 + 1/4 = ?',
+                // Textaufgabe
+                challengeId: multiplikation._id,
+                title: 'Obststand',
+                description: 'Ein Bauer verkauft täglich 145 Äpfel. Wie viele Äpfel verkauft er in 4 Wochen?',
                 mode: 'mathematics',
-                expectedAnswer: '3/4',
-                choices: ['2/6', '3/4', '2/4', '1/2'],
+                expectedAnswer: '4060',
                 hints: [
-                    {text: 'Bringe beide auf den gleichen Nenner (4)', order: 1},
-                    {text: '1/2 = 2/4, also 2/4 + 1/4 = ?', order: 2},
+                    { text: '4 Wochen = 4 × 7 = 28 Tage', order: 1 },
+                    { text: '145 × 28 = ?', order: 2 },
                 ],
-                order: 4,
-                difficulty: 'medium',
-                xpReward: 15,
-                isActive: true,
-            },
-            {
-                challengeId: fractions._id,
-                title: 'Kürzen',
-                description: 'Kürze den Bruch: 6/8 = ?',
-                mode: 'mathematics',
-                expectedAnswer: '3/4',
-                choices: ['3/4', '2/4', '6/8', '1/2'],
-                hints: [{text: 'Teile Zähler und Nenner durch 2', order: 1}],
                 order: 5,
-                difficulty: 'medium',
-                xpReward: 15,
-                isActive: true,
-            },
-            {
-                challengeId: fractions._id,
-                title: 'Bruch von einer Menge',
-                description: '3/4 von 20 Äpfeln – wie viele Äpfel sind das?',
-                mode: 'mathematics',
-                expectedAnswer: '15',
-                hints: [
-                    {text: '1/4 von 20 = 20 ÷ 4 = 5', order: 1},
-                    {text: '3/4 = 3 × (1/4 von 20)', order: 2},
-                ],
-                order: 6,
-                difficulty: 'medium',
-                xpReward: 20,
-                isActive: true,
-            },
-            {
-                challengeId: fractions._id,
-                title: 'Gemischte Zahl',
-                description: 'Schreibe als gemischte Zahl: 9/4 = ?',
-                mode: 'mathematics',
-                expectedAnswer: '2 1/4',
-                hints: [{text: '9 ÷ 4 = 2 Rest 1, also 2 ganze und 1/4', order: 1}],
-                order: 7,
                 difficulty: 'hard',
                 xpReward: 25,
                 isActive: true,
@@ -515,165 +508,168 @@ const mathematics = async (req, res) => {
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 4. DEZIMALZAHLEN
+        // 4. SCHRIFTLICHE DIVISION
         // ══════════════════════════════════════════════════════════════════════
-        const decimals = await Challenge.create({
-            title: 'Dezimalzahlen',
-            principle: 'Kommazahlen',
-            description: 'Rechne mit Dezimalzahlen und verstehe Zehntel & Hundertstel',
+        const division = await Challenge.create({
+            title: 'Division',
+            principle: 'Schriftliches Dividieren',
+            description: 'Teile Zahlen durch ein- und zweistellige Divisoren',
             order: 4,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: decimals._id,
-                title: 'Dezimalzahl lesen',
-                description: 'Welche Zahl zeigt "drei Zehntel"?',
+                // Rechenaufgabe
+                challengeId: division._id,
+                title: 'Einfach dividieren',
+                description: 'Rechne: 648 ÷ 6 = ?',
                 mode: 'mathematics',
-                expectedAnswer: '0,3',
-                choices: ['3,0', '0,3', '0,03', '30'],
-                hints: [{text: 'Ein Zehntel = 0,1', order: 1}],
+                expectedAnswer: '108',
+                hints: [{ text: 'Dividiere Stelle für Stelle von links: 6÷6=1, 4÷6 geht nicht, 48÷6=8', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: decimals._id,
-                title: 'Dezimalzahlen addieren',
-                description: 'Rechne: 3,4 + 1,8 = ?',
+                // Single Choice
+                challengeId: division._id,
+                title: 'Richtiges Ergebnis',
+                description: 'Was ergibt 945 ÷ 9?',
                 mode: 'mathematics',
-                expectedAnswer: '5,2',
-                hints: [{text: '4 + 8 = 12, also eine Stelle übertragen', order: 1}],
+                expectedAnswer: '105',
+                choices: ['95', '100', '105', '115'],
+                hints: [{ text: '9÷9=1, 4÷9 geht nicht → 0, 45÷9=5 → 105', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: decimals._id,
-                title: 'Dezimalzahlen subtrahieren',
-                description: 'Rechne: 7,5 − 2,8 = ?',
+                // Rechenaufgabe mit Rest
+                challengeId: division._id,
+                title: 'Division mit Rest',
+                description: 'Rechne: 437 ÷ 8 = ? Rest ? (Schreibe z.B. 54 R 5)',
                 mode: 'mathematics',
-                expectedAnswer: '4,7',
-                hints: [{text: 'Schreibe die Zahlen untereinander und richte das Komma aus', order: 1}],
+                expectedAnswer: '54 R 5',
+                hints: [
+                    { text: '8 × 54 = 432, also bleibt 437 − 432 = 5 Rest', order: 1 },
+                ],
                 order: 3,
                 difficulty: 'medium',
                 xpReward: 10,
                 isActive: true,
             },
             {
-                challengeId: decimals._id,
-                title: 'Größer oder kleiner?',
-                description: 'Welche Zahl ist größer?',
+                // Textaufgabe
+                challengeId: division._id,
+                title: 'Kuchen verteilen',
+                description: 'Für ein Schulfest werden 360 Kekse gebacken. Sie werden gleichmäßig auf 30 Teller verteilt. Wie viele Kekse liegen auf jedem Teller?',
                 mode: 'mathematics',
-                expectedAnswer: '0,9',
-                choices: ['0,09', '0,9'],
-                hints: [{text: '0,9 = 9 Zehntel, 0,09 = 9 Hundertstel', order: 1}],
+                expectedAnswer: '12',
+                hints: [{ text: '360 ÷ 30 = ? (Tipp: erst 360 ÷ 3, dann ÷ 10)', order: 1 }],
                 order: 4,
-                difficulty: 'easy',
-                xpReward: 5,
-                isActive: true,
-            },
-            {
-                challengeId: decimals._id,
-                title: 'Dezimalzahl multiplizieren',
-                description: 'Rechne: 2,5 × 4 = ?',
-                mode: 'mathematics',
-                expectedAnswer: '10',
-                choices: ['8', '9', '10', '10,5'],
-                hints: [{text: '2,5 × 4 = 2 × 4 + 0,5 × 4', order: 1}],
-                order: 5,
-                difficulty: 'medium',
-                xpReward: 10,
-                isActive: true,
-            },
-            {
-                challengeId: decimals._id,
-                title: 'Einkauf an der Kasse',
-                description: 'Du kaufst etwas für 3,70 € und gibst 5,00 € – wie viel Wechselgeld bekommst du?',
-                mode: 'mathematics',
-                expectedAnswer: '1,30',
-                hints: [{text: '5,00 − 3,70 = ?', order: 1}],
-                order: 6,
                 difficulty: 'medium',
                 xpReward: 15,
+                isActive: true,
+            },
+            {
+                // Textaufgabe
+                challengeId: division._id,
+                title: 'Busfahrt',
+                description: 'Für einen Ausflug fahren 168 Kinder mit. In jeden Bus passen 40 Kinder. Wie viele Busse werden mindestens gebraucht?',
+                mode: 'mathematics',
+                expectedAnswer: '5',
+                choices: ['4', '5', '6', '7'],
+                hints: [
+                    { text: '168 ÷ 40 = 4 Rest 8 → der Rest braucht einen weiteren Bus', order: 1 },
+                ],
+                order: 5,
+                difficulty: 'hard',
+                xpReward: 25,
                 isActive: true,
             },
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 5. PROZENTRECHNUNG
+        // 5. MASSE & EINHEITEN (Länge, Gewicht, Zeit)
         // ══════════════════════════════════════════════════════════════════════
-        const percent = await Challenge.create({
-            title: 'Prozentrechnung',
-            principle: 'Prozent',
-            description: 'Verstehe Prozent und berechne Rabatte und Anteile',
+        const masse = await Challenge.create({
+            title: 'Maße & Einheiten',
+            principle: 'Länge, Gewicht & Zeit',
+            description: 'Rechne mit Längen-, Gewichts- und Zeitmaßen um',
             order: 5,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: percent._id,
-                title: 'Was bedeutet Prozent?',
-                description: 'Wie viel ist 1 %?',
+                // Single Choice – Längenmaße
+                challengeId: masse._id,
+                title: 'Längen umrechnen',
+                description: 'Wie viel Zentimeter sind 3,5 Meter?',
                 mode: 'mathematics',
-                expectedAnswer: '1/100',
-                choices: ['1/10', '1/100', '1/1000', '10/100'],
-                hints: [{text: 'Pro Cent = pro Hundert', order: 1}],
+                expectedAnswer: '350',
+                choices: ['35', '350', '3500', '305'],
+                hints: [{ text: '1 m = 100 cm → 3,5 × 100 = ?', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: percent._id,
-                title: 'Einfache Prozentrechnung',
-                description: 'Wie viel sind 50 % von 80?',
+                // Rechenaufgabe – Gewicht
+                challengeId: masse._id,
+                title: 'Kilogramm und Gramm',
+                description: 'Wie viele Gramm sind 2 kg 750 g?',
                 mode: 'mathematics',
-                expectedAnswer: '40',
-                choices: ['20', '40', '60', '80'],
-                hints: [{text: '50 % = die Hälfte', order: 1}],
+                expectedAnswer: '2750',
+                hints: [{ text: '1 kg = 1000 g → 2 × 1000 + 750 = ?', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: percent._id,
-                title: '10 % berechnen',
-                description: 'Wie viel sind 10 % von 350?',
+                // Textaufgabe – Zeit
+                challengeId: masse._id,
+                title: 'Wie lange dauert das?',
+                description: 'Der Unterricht beginnt um 8:00 Uhr und endet um 12:45 Uhr. Wie lange dauert der Unterricht? (Antwort in Minuten)',
                 mode: 'mathematics',
-                expectedAnswer: '35',
-                hints: [{text: '10 % = Zahl durch 10 teilen', order: 1}],
+                expectedAnswer: '285',
+                hints: [
+                    { text: 'Von 8:00 bis 12:00 = 4 Stunden = 240 Minuten', order: 1 },
+                    { text: 'Dazu kommen noch 45 Minuten: 240 + 45 = ?', order: 2 },
+                ],
                 order: 3,
+                difficulty: 'medium',
+                xpReward: 15,
+                isActive: true,
+            },
+            {
+                // Single Choice – Zeit
+                challengeId: masse._id,
+                title: 'Welche Einheit passt?',
+                description: 'Max fährt mit dem Zug von Wien nach Salzburg. Welche Einheit passt am besten für die Reisedauer?',
+                mode: 'mathematics',
+                expectedAnswer: 'Stunden',
+                choices: ['Sekunden', 'Minuten', 'Stunden', 'Tage'],
+                hints: [{ text: 'Die Fahrt dauert etwa 2,5 – eine kurze oder lange Zeitspanne?', order: 1 }],
+                order: 4,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: percent._id,
-                title: '25 % berechnen',
-                description: 'Wie viel sind 25 % von 60?',
+                // Textaufgabe – Gewicht
+                challengeId: masse._id,
+                title: 'Einkauf wiegen',
+                description: 'Lena kauft 3 Pakete Mehl à 1 kg und 500 g Zucker. Wie schwer ist ihre Einkaufstasche insgesamt in Gramm?',
                 mode: 'mathematics',
-                expectedAnswer: '15',
-                hints: [{text: '25 % = ein Viertel = ÷ 4', order: 1}],
-                order: 4,
-                difficulty: 'medium',
-                xpReward: 10,
-                isActive: true,
-            },
-            {
-                challengeId: percent._id,
-                title: 'Rabatt berechnen',
-                description: 'Ein Fahrrad kostet 120 €. Es gibt 20 % Rabatt. Wie viel kostet es jetzt?',
-                mode: 'mathematics',
-                expectedAnswer: '96',
+                expectedAnswer: '3500',
                 hints: [
-                    {text: '10 % von 120 = 12, also 20 % = 24', order: 1},
-                    {text: '120 − 24 = ?', order: 2},
+                    { text: '3 × 1000 g + 500 g = ?', order: 1 },
                 ],
                 order: 5,
                 difficulty: 'medium',
@@ -681,103 +677,98 @@ const mathematics = async (req, res) => {
                 isActive: true,
             },
             {
-                challengeId: percent._id,
-                title: 'Prozentwert bestimmen',
-                description: '15 von 60 Schülern fahren mit dem Rad. Wie viel Prozent ist das?',
+                // Rechenaufgabe – Meter und km
+                challengeId: masse._id,
+                title: 'Kilometer und Meter',
+                description: 'Der Schulweg ist 2 km 340 m lang. Wie viele Meter sind das?',
                 mode: 'mathematics',
-                expectedAnswer: '25',
-                choices: ['15 %', '20 %', '25 %', '30 %'],
-                hints: [{text: '15 ÷ 60 × 100 = ?', order: 1}],
+                expectedAnswer: '2340',
+                hints: [{ text: '1 km = 1000 m → 2 × 1000 + 340 = ?', order: 1 }],
                 order: 6,
-                difficulty: 'hard',
-                xpReward: 25,
+                difficulty: 'easy',
+                xpReward: 5,
                 isActive: true,
             },
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 6. GEOMETRIE – FLÄCHEN
+        // 6. GEOMETRIE – UMFANG
         // ══════════════════════════════════════════════════════════════════════
-        const geometry = await Challenge.create({
-            title: 'Geometrie – Flächen',
-            principle: 'Flächenberechnung',
-            description: 'Berechne Umfang und Fläche einfacher Figuren',
+        const umfang = await Challenge.create({
+            title: 'Umfang berechnen',
+            principle: 'Geometrie – Umfang',
+            description: 'Berechne den Umfang von Rechteck, Quadrat und anderen Figuren',
             order: 6,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: geometry._id,
-                title: 'Rechteck – Umfang',
-                description: 'Ein Rechteck ist 6 cm lang und 4 cm breit. Wie groß ist der Umfang?',
+                // Single Choice
+                challengeId: umfang._id,
+                title: 'Formel für den Umfang',
+                description: 'Welche Formel berechnet den Umfang eines Rechtecks?',
                 mode: 'mathematics',
-                expectedAnswer: '20',
-                choices: ['10 cm', '20 cm', '24 cm', '48 cm'],
-                hints: [{text: 'Umfang = 2 × (Länge + Breite)', order: 1}],
+                expectedAnswer: 'U = 2 × (a + b)',
+                choices: ['U = a × b', 'U = 2 × (a + b)', 'U = 4 × a', 'U = a + b'],
+                hints: [{ text: 'Ein Rechteck hat 2 lange und 2 kurze Seiten.', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: geometry._id,
-                title: 'Rechteck – Fläche',
-                description: 'Ein Rechteck ist 8 cm lang und 5 cm breit. Wie groß ist die Fläche in cm²?',
+                // Rechenaufgabe
+                challengeId: umfang._id,
+                title: 'Rechteck – Umfang',
+                description: 'Ein Rechteck ist 12 cm lang und 7 cm breit. Wie groß ist der Umfang in cm?',
                 mode: 'mathematics',
-                expectedAnswer: '40',
-                hints: [{text: 'Fläche = Länge × Breite', order: 1}],
+                expectedAnswer: '38',
+                hints: [{ text: 'U = 2 × (12 + 7) = 2 × 19 = ?', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: geometry._id,
-                title: 'Quadrat – Fläche',
-                description: 'Ein Quadrat hat eine Seite von 7 cm. Wie groß ist die Fläche in cm²?',
+                // Rechenaufgabe
+                challengeId: umfang._id,
+                title: 'Quadrat – Umfang',
+                description: 'Ein Quadrat hat eine Seitenlänge von 9 cm. Wie groß ist sein Umfang in cm?',
                 mode: 'mathematics',
-                expectedAnswer: '49',
-                choices: ['14 cm²', '28 cm²', '49 cm²', '56 cm²'],
-                hints: [{text: 'Fläche Quadrat = Seite × Seite', order: 1}],
+                expectedAnswer: '36',
+                hints: [{ text: 'U = 4 × a = 4 × 9 = ?', order: 1 }],
                 order: 3,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: geometry._id,
-                title: 'Dreieck – Fläche',
-                description: 'Ein Dreieck hat Grundlinie 10 cm und Höhe 6 cm. Wie groß ist die Fläche in cm²?',
+                // Textaufgabe
+                challengeId: umfang._id,
+                title: 'Garten einzäunen',
+                description: 'Ein rechteckiger Garten ist 15 m lang und 8 m breit. Wie viele Meter Zaun werden mindestens gebraucht?',
                 mode: 'mathematics',
-                expectedAnswer: '30',
-                hints: [{text: 'Fläche Dreieck = (Grundlinie × Höhe) ÷ 2', order: 1}],
+                expectedAnswer: '46',
+                hints: [
+                    { text: 'Der Zaun geht einmal rund um den Garten → Umfang berechnen', order: 1 },
+                    { text: 'U = 2 × (15 + 8) = ?', order: 2 },
+                ],
                 order: 4,
-                difficulty: 'medium',
-                xpReward: 10,
-                isActive: true,
-            },
-            {
-                challengeId: geometry._id,
-                title: 'Welche Figur hat die größte Fläche?',
-                description: 'Quadrat 5×5 cm, Rechteck 4×7 cm oder Rechteck 3×9 cm – welches ist am größten?',
-                mode: 'mathematics',
-                expectedAnswer: 'Rechteck 4×7',
-                choices: ['Quadrat 5×5', 'Rechteck 4×7', 'Rechteck 3×9'],
-                hints: [{text: 'Berechne alle drei Flächen und vergleiche', order: 1}],
-                order: 5,
                 difficulty: 'medium',
                 xpReward: 15,
                 isActive: true,
             },
             {
-                challengeId: geometry._id,
-                title: 'Rasen säen',
-                description: 'Ein rechteckiger Garten ist 12 m lang und 8 m breit. Wie viele m² Rasen werden benötigt?',
+                // Textaufgabe mit Rückwärtsrechnen
+                challengeId: umfang._id,
+                title: 'Seite gesucht',
+                description: 'Ein Quadrat hat einen Umfang von 52 cm. Wie lang ist eine Seite?',
                 mode: 'mathematics',
-                expectedAnswer: '96',
-                hints: [{text: 'Fläche = Länge × Breite', order: 1}],
-                order: 6,
+                expectedAnswer: '13',
+                choices: ['11', '12', '13', '14'],
+                hints: [{ text: 'U = 4 × a → a = U ÷ 4 = 52 ÷ 4 = ?', order: 1 }],
+                order: 5,
                 difficulty: 'medium',
                 xpReward: 15,
                 isActive: true,
@@ -785,66 +776,104 @@ const mathematics = async (req, res) => {
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 7. GEOMETRIE – KÖRPER
+        // 7. GEOMETRIE – FLÄCHENINHALT
         // ══════════════════════════════════════════════════════════════════════
-        const bodies = await Challenge.create({
-            title: 'Geometrie – Körper',
-            principle: 'Würfel & Quader',
-            description: 'Lerne Würfel und Quader kennen und berechne ihr Volumen',
+        const flaeche = await Challenge.create({
+            title: 'Flächeninhalt berechnen',
+            principle: 'Geometrie – Fläche',
+            description: 'Berechne den Flächeninhalt von Rechteck und Quadrat',
             order: 7,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: bodies._id,
-                title: 'Körper erkennen',
-                description: 'Welcher Körper hat sechs gleich große quadratische Flächen?',
+                // Single Choice
+                challengeId: flaeche._id,
+                title: 'Was ist ein cm²?',
+                description: 'Was bedeutet die Einheit cm² (Quadratzentimeter)?',
                 mode: 'mathematics',
-                expectedAnswer: 'Würfel',
-                choices: ['Quader', 'Würfel', 'Zylinder', 'Kugel'],
-                hints: [{text: 'Alle Seiten sind gleich lang', order: 1}],
+                expectedAnswer: 'Ein Quadrat mit 1 cm Seitenlänge',
+                choices: [
+                    'Ein Quadrat mit 1 cm Seitenlänge',
+                    'Eine Linie von 1 cm Länge',
+                    'Ein Würfel mit 1 cm Kantenlänge',
+                    'Ein Kreis mit 1 cm Durchmesser',
+                ],
+                hints: [{ text: 'Flächen werden in Quadraten gemessen.', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: bodies._id,
-                title: 'Würfel – Volumen',
-                description: 'Ein Würfel hat eine Kantenlänge von 3 cm. Wie groß ist sein Volumen in cm³?',
+                // Rechenaufgabe
+                challengeId: flaeche._id,
+                title: 'Rechteck – Flächeninhalt',
+                description: 'Ein Rechteck ist 14 cm lang und 6 cm breit. Wie groß ist sein Flächeninhalt in cm²?',
                 mode: 'mathematics',
-                expectedAnswer: '27',
-                choices: ['9 cm³', '18 cm³', '27 cm³', '36 cm³'],
-                hints: [{text: 'Volumen Würfel = Kante³ = Kante × Kante × Kante', order: 1}],
+                expectedAnswer: '84',
+                hints: [{ text: 'A = Länge × Breite = 14 × 6 = ?', order: 1 }],
                 order: 2,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: bodies._id,
-                title: 'Quader – Volumen',
-                description: 'Ein Quader ist 5 cm lang, 4 cm breit und 3 cm hoch. Wie groß ist sein Volumen in cm³?',
+                // Rechenaufgabe
+                challengeId: flaeche._id,
+                title: 'Quadrat – Flächeninhalt',
+                description: 'Ein Quadrat hat eine Seitenlänge von 11 cm. Wie groß ist sein Flächeninhalt in cm²?',
                 mode: 'mathematics',
-                expectedAnswer: '60',
-                hints: [{text: 'Volumen Quader = Länge × Breite × Höhe', order: 1}],
+                expectedAnswer: '121',
+                hints: [{ text: 'A = a × a = 11 × 11 = ?', order: 1 }],
                 order: 3,
-                difficulty: 'medium',
-                xpReward: 10,
+                difficulty: 'easy',
+                xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: bodies._id,
-                title: 'Aquarium befüllen',
-                description: 'Ein Aquarium ist 60 cm lang, 30 cm breit und 40 cm hoch. Wie viele Liter fasst es? (1 Liter = 1000 cm³)',
+                // Textaufgabe
+                challengeId: flaeche._id,
+                title: 'Teppich kaufen',
+                description: 'Ein Zimmer ist 5 m lang und 4 m breit. Wie groß muss der Teppich mindestens sein? (Antwort in m²)',
                 mode: 'mathematics',
-                expectedAnswer: '72',
-                hints: [
-                    {text: 'Berechne erst das Volumen in cm³', order: 1},
-                    {text: 'Dann teile durch 1000 um Liter zu erhalten', order: 2},
-                ],
+                expectedAnswer: '20',
+                hints: [{ text: 'A = 5 × 4 = ?', order: 1 }],
                 order: 4,
+                difficulty: 'medium',
+                xpReward: 15,
+                isActive: true,
+            },
+            {
+                // Textaufgabe – Vergleich
+                challengeId: flaeche._id,
+                title: 'Welche Fläche ist größer?',
+                description: 'Rechteck A: 8 cm × 9 cm. Rechteck B: 6 cm × 12 cm. Welches hat den größeren Flächeninhalt?',
+                mode: 'mathematics',
+                expectedAnswer: 'Gleich groß',
+                choices: ['Rechteck A', 'Rechteck B', 'Gleich groß'],
+                hints: [
+                    { text: 'Berechne beide Flächen: 8×9 und 6×12', order: 1 },
+                    { text: '8×9 = 72 und 6×12 = 72', order: 2 },
+                ],
+                order: 5,
+                difficulty: 'medium',
+                xpReward: 15,
+                isActive: true,
+            },
+            {
+                // Textaufgabe – kombiniert
+                challengeId: flaeche._id,
+                title: 'Rasenmähen',
+                description: 'Ein Garten ist 20 m lang und 12 m breit. In der Mitte steht ein Schuppen (4 m × 3 m). Wie viel m² Rasen muss gemäht werden?',
+                mode: 'mathematics',
+                expectedAnswer: '228',
+                hints: [
+                    { text: 'Gartenfläche: 20 × 12 = 240 m²', order: 1 },
+                    { text: 'Schuppenfläche: 4 × 3 = 12 m² → 240 − 12 = ?', order: 2 },
+                ],
+                order: 6,
                 difficulty: 'hard',
                 xpReward: 25,
                 isActive: true,
@@ -852,68 +881,100 @@ const mathematics = async (req, res) => {
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 8. VERHÄLTNISSE & PROPORTIONEN
+        // 8. BRUCHZAHLEN (nur 4. Schulstufe)
         // ══════════════════════════════════════════════════════════════════════
-        const ratios = await Challenge.create({
-            title: 'Verhältnisse',
-            principle: 'Verhältnisse & Proportionen',
-            description: 'Verstehe Verhältnisse und löse proportionale Aufgaben',
+        const brueche = await Challenge.create({
+            title: 'Bruchzahlen',
+            principle: 'Brüche verstehen & vergleichen',
+            description: 'Lerne Brüche kennen, lesen und vergleichen',
             order: 8,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: ratios._id,
-                title: 'Verhältnis vereinfachen',
-                description: 'Vereinfache das Verhältnis 6:4',
+                // Single Choice – Grundbegriff
+                challengeId: brueche._id,
+                title: 'Was ist ein Bruch?',
+                description: 'Eine Pizza wird in 8 gleiche Teile geschnitten. Du nimmst 3 Teile. Welcher Bruch beschreibt deinen Anteil?',
                 mode: 'mathematics',
-                expectedAnswer: '3:2',
-                choices: ['6:4', '3:2', '2:3', '1:2'],
-                hints: [{text: 'Teile beide Zahlen durch ihren ggT (= 2)', order: 1}],
+                expectedAnswer: '3/8',
+                choices: ['8/3', '3/8', '5/8', '3/5'],
+                hints: [{ text: 'Zähler = deine Teile, Nenner = alle Teile', order: 1 }],
                 order: 1,
                 difficulty: 'easy',
                 xpReward: 5,
                 isActive: true,
             },
             {
-                challengeId: ratios._id,
-                title: 'Proportionaler Dreisatz',
-                description: '3 Hefte kosten 2,40 €. Was kosten 7 Hefte?',
+                // Single Choice – Vergleich
+                challengeId: brueche._id,
+                title: 'Brüche vergleichen',
+                description: 'Was ist größer: 1/4 oder 1/6?',
                 mode: 'mathematics',
-                expectedAnswer: '5,60',
-                hints: [
-                    {text: '1 Heft kostet: 2,40 ÷ 3 = ?', order: 1},
-                    {text: 'Dann × 7', order: 2},
-                ],
+                expectedAnswer: '1/4',
+                choices: ['1/4', '1/6', 'Beide gleich'],
+                hints: [{ text: 'Je größer der Nenner, desto kleiner der Teil!', order: 1 }],
                 order: 2,
+                difficulty: 'easy',
+                xpReward: 5,
+                isActive: true,
+            },
+            {
+                // Rechenaufgabe
+                challengeId: brueche._id,
+                title: 'Brüche addieren',
+                description: 'Rechne: 2/8 + 3/8 = ? (Kürze wenn möglich)',
+                mode: 'mathematics',
+                expectedAnswer: '5/8',
+                hints: [{ text: 'Gleicher Nenner → Zähler addieren: 2 + 3 = 5, Nenner bleibt 8', order: 1 }],
+                order: 3,
+                difficulty: 'easy',
+                xpReward: 5,
+                isActive: true,
+            },
+            {
+                // Single Choice – Hälfte, Viertel, Drittel
+                challengeId: brueche._id,
+                title: 'Bruchname kennen',
+                description: 'Wie heißt der Bruch 1/3 in Worten?',
+                mode: 'mathematics',
+                expectedAnswer: 'ein Drittel',
+                choices: ['ein Halb', 'ein Drittel', 'ein Viertel', 'ein Sechstel'],
+                hints: [{ text: 'Der Nenner gibt den Namen: 2 = Halb, 3 = Drittel, 4 = Viertel …', order: 1 }],
+                order: 4,
+                difficulty: 'easy',
+                xpReward: 5,
+                isActive: true,
+            },
+            {
+                // Textaufgabe
+                challengeId: brueche._id,
+                title: 'Schokolade teilen',
+                description: 'Eine Tafel Schokolade hat 12 Stücke. Tim isst 1/4 davon. Wie viele Stücke isst er?',
+                mode: 'mathematics',
+                expectedAnswer: '3',
+                hints: [
+                    { text: '1/4 von 12 = 12 ÷ 4 = ?', order: 1 },
+                ],
+                order: 5,
                 difficulty: 'medium',
                 xpReward: 15,
                 isActive: true,
             },
             {
-                challengeId: ratios._id,
-                title: 'Mischungsverhältnis',
-                description: 'Orangensaft und Wasser werden im Verhältnis 1:3 gemischt. Wie viel ml Wasser braucht man für 250 ml Saft?',
+                // Textaufgabe – Bruch von Menge
+                challengeId: brueche._id,
+                title: 'Klasse aufteilen',
+                description: 'In einer Klasse sind 24 Kinder. 3/8 der Kinder haben ein Haustier. Wie viele Kinder haben ein Haustier?',
                 mode: 'mathematics',
-                expectedAnswer: '750',
-                hints: [{text: '1 Teil Saft → 3 Teile Wasser', order: 1}],
-                order: 3,
-                difficulty: 'medium',
-                xpReward: 20,
-                isActive: true,
-            },
-            {
-                challengeId: ratios._id,
-                title: 'Karte lesen',
-                description: 'Auf einer Karte im Maßstab 1:50 000 misst eine Strecke 4 cm. Wie lang ist sie in der Wirklichkeit (in km)?',
-                mode: 'mathematics',
-                expectedAnswer: '2',
+                expectedAnswer: '9',
+                choices: ['6', '8', '9', '12'],
                 hints: [
-                    {text: '4 cm × 50 000 = ? cm', order: 1},
-                    {text: '200 000 cm = ? km (÷ 100 000)', order: 2},
+                    { text: '1/8 von 24 = 24 ÷ 8 = 3', order: 1 },
+                    { text: '3/8 = 3 × 3 = ?', order: 2 },
                 ],
-                order: 4,
+                order: 6,
                 difficulty: 'hard',
                 xpReward: 25,
                 isActive: true,
@@ -921,88 +982,101 @@ const mathematics = async (req, res) => {
         ]);
 
         // ══════════════════════════════════════════════════════════════════════
-        // 9. NEGATIVE ZAHLEN
+        // 9. SACHAUFGABEN & KOMBINIERTES RECHNEN
         // ══════════════════════════════════════════════════════════════════════
-        const negativeNumbers = await Challenge.create({
-            title: 'Negative Zahlen',
-            principle: 'Ganze Zahlen',
-            description: 'Lerne mit negativen Zahlen rechnen – wie bei Temperaturen!',
+        const sachaufgaben = await Challenge.create({
+            title: 'Sachaufgaben',
+            principle: 'Kombiniertes Rechnen',
+            description: 'Löse Textaufgaben mit mehreren Rechenschritten',
             order: 9,
             isActive: true,
         });
 
         await Level.insertMany([
             {
-                challengeId: negativeNumbers._id,
-                title: 'Zahlenstrahl',
-                description: 'Welche Zahl liegt zwischen −3 und −1?',
+                // Textaufgabe
+                challengeId: sachaufgaben._id,
+                title: 'Taschengeld',
+                description: 'Lisa bekommt jede Woche 5 € Taschengeld. Sie spart 8 Wochen lang. Dann kauft sie ein Buch um 18 €. Wie viel Geld hat sie danach noch?',
                 mode: 'mathematics',
-                expectedAnswer: '-2',
-                choices: ['0', '-2', '1', '-4'],
-                hints: [{text: 'Stell dir einen Thermometer vor', order: 1}],
+                expectedAnswer: '22',
+                hints: [
+                    { text: 'Erst: 8 × 5 € = Gesamtersparnis', order: 1 },
+                    { text: 'Dann: Ersparnis − 18 € = ?', order: 2 },
+                ],
                 order: 1,
-                difficulty: 'easy',
-                xpReward: 5,
+                difficulty: 'medium',
+                xpReward: 15,
                 isActive: true,
             },
             {
-                challengeId: negativeNumbers._id,
-                title: 'Temperatur',
-                description: 'Morgens sind es −5 °C. Mittags steigt die Temperatur um 9 °C. Wie viel Grad sind es mittags?',
+                // Single Choice
+                challengeId: sachaufgaben._id,
+                title: 'Welche Rechnung passt?',
+                description: 'Tom hat 3 Schachteln mit je 24 Buntstiften. Er verschenkt 15 Stifte. Welche Rechnung ergibt die verbleibende Anzahl?',
                 mode: 'mathematics',
-                expectedAnswer: '4',
-                choices: ['-4 °C', '4 °C', '14 °C', '-14 °C'],
-                hints: [{text: '−5 + 9 = ?', order: 1}],
+                expectedAnswer: '3 × 24 − 15',
+                choices: ['3 + 24 − 15', '3 × 24 − 15', '24 ÷ 3 − 15', '3 × 24 + 15'],
+                hints: [{ text: 'Erst alle Stifte berechnen, dann die verschenkten abziehen.', order: 1 }],
                 order: 2,
-                difficulty: 'easy',
-                xpReward: 5,
+                difficulty: 'medium',
+                xpReward: 10,
                 isActive: true,
             },
             {
-                challengeId: negativeNumbers._id,
-                title: 'Addition negativer Zahlen',
-                description: 'Rechne: (−4) + (−3) = ?',
+                // Textaufgabe
+                challengeId: sachaufgaben._id,
+                title: 'Klassenreise',
+                description: 'Für eine Klassenreise zahlt jedes der 23 Kinder 45 €. Die Lehrerin zahlt nichts. Wie viel Geld wurde insgesamt eingesammelt?',
                 mode: 'mathematics',
-                expectedAnswer: '-7',
-                choices: ['-1', '1', '-7', '7'],
-                hints: [{text: 'Beide Zahlen sind negativ, also werden die Beträge addiert', order: 1}],
+                expectedAnswer: '1035',
+                hints: [{ text: '23 × 45 = ?', order: 1 }],
                 order: 3,
                 difficulty: 'medium',
-                xpReward: 10,
+                xpReward: 15,
                 isActive: true,
             },
             {
-                challengeId: negativeNumbers._id,
-                title: 'Subtraktion',
-                description: 'Rechne: 3 − 8 = ?',
+                // Textaufgabe – mehrschrittig
+                challengeId: sachaufgaben._id,
+                title: 'Supermarkt',
+                description: 'Mama kauft 3 Liter Milch à 1,20 € und 2 Packungen Butter à 2,40 €. Sie bezahlt mit einem 10-€-Schein. Wie viel Wechselgeld bekommt sie? (Antwort in Euro, z.B. 1,20)',
                 mode: 'mathematics',
-                expectedAnswer: '-5',
-                hints: [{text: 'Du gehst auf dem Zahlenstrahl von 3 aus 8 Schritte nach links', order: 1}],
+                expectedAnswer: '1,40',
+                hints: [
+                    { text: 'Milch: 3 × 1,20 € = 3,60 €', order: 1 },
+                    { text: 'Butter: 2 × 2,40 € = 4,80 €', order: 2 },
+                    { text: 'Gesamt: 3,60 + 4,80 = 8,40 € → 10,00 − 8,40 = ?', order: 3 },
+                ],
                 order: 4,
-                difficulty: 'medium',
-                xpReward: 10,
+                difficulty: 'hard',
+                xpReward: 25,
                 isActive: true,
             },
             {
-                challengeId: negativeNumbers._id,
-                title: 'Größer oder kleiner?',
-                description: 'Welche Zahl ist größer?',
+                // Textaufgabe
+                challengeId: sachaufgaben._id,
+                title: 'Sportfest',
+                description: 'Beim Sportfest nehmen 8 Schulklassen teil. Jede Klasse hat 25 Kinder. Davon nehmen 3/5 am 100-m-Lauf teil. Wie viele Kinder laufen insgesamt?',
                 mode: 'mathematics',
-                expectedAnswer: '-1',
-                choices: ['-5', '-1'],
-                hints: [{text: 'Auf dem Zahlenstrahl liegt die größere Zahl weiter rechts', order: 1}],
+                expectedAnswer: '120',
+                choices: ['100', '110', '120', '130'],
+                hints: [
+                    { text: 'Alle Kinder: 8 × 25 = 200', order: 1 },
+                    { text: '3/5 von 200: 200 ÷ 5 × 3 = ?', order: 2 },
+                ],
                 order: 5,
-                difficulty: 'easy',
-                xpReward: 5,
+                difficulty: 'hard',
+                xpReward: 25,
                 isActive: true,
             },
         ]);
 
-        console.log("DONE SEEDING");
-        return res.status(200).json({message: 'Seeding successfully'});
+        console.log("DONE SEEDING – 4. Klasse Volksschule Österreich");
+        return res.status(200).json({ message: 'Seeding successfully' });
     } catch (err) {
         console.log("ERROR SEEDING", err);
-        return res.status(500).json({message: 'Seeding failed'});
+        return res.status(500).json({ message: 'Seeding failed' });
     }
 };
 
