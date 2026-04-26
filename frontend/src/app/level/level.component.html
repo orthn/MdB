@@ -3,30 +3,48 @@
   { label: 'Level' }
 ]"></app-breadcrumb>
 
+<!-- Loading -->
 <div *ngIf="loading" class="text-muted">
   Lade Level...
 </div>
 
-<div *ngIf="!loading && level" class="level-layout text-white">
-  <!-- HEADER -->
+<div *ngIf="!loading && level" class="level-layout">
+
+  <!-- ── HEADER ────────────────────────────────────────────── -->
   <section class="level-header">
     <div class="header-main">
       <div class="header-text">
+
+        <!-- Mode icon -->
+        <span class="header-icon">
+          <ng-container *ngIf="level.mode === 'mathematics'">🧮</ng-container>
+          <ng-container *ngIf="level.mode === 'code'">💻</ng-container>
+          <ng-container *ngIf="level.mode === 'blocks'">🧩</ng-container>
+        </span>
+
         <h2 class="title">{{ level.title }}</h2>
-        <p class="description">
-          Deine Aufgabe: {{ level.description }}
-        </p>
+
+        <!-- Task box — prominent task display -->
+        <div class="task-box">
+          <span class="task-label">Aufgabe</span>
+          <span class="task-text">{{ level.description }}</span>
+        </div>
+
       </div>
 
-      <span class="difficulty" [ngClass]="level.difficulty">
-        <ng-container *ngIf="level.difficulty === 'easy'">LEICHT</ng-container>
-        <ng-container *ngIf="level.difficulty === 'medium'">NORMAL</ng-container>
-        <ng-container *ngIf="level.difficulty === 'hard'">SCHWER</ng-container>
-      </span>
+      <!-- Difficulty + XP -->
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+        <span class="difficulty" [ngClass]="level.difficulty">
+          <ng-container *ngIf="level.difficulty === 'easy'">⭐ Leicht</ng-container>
+          <ng-container *ngIf="level.difficulty === 'medium'">⭐⭐ Normal</ng-container>
+          <ng-container *ngIf="level.difficulty === 'hard'">⭐⭐⭐ Schwer</ng-container>
+        </span>
+
+      </div>
     </div>
   </section>
 
-  <!-- WORK AREA -->
+  <!-- ── WORK AREA ─────────────────────────────────────────── -->
   <section class="level-work">
 
     <!-- CODE -->
@@ -46,24 +64,25 @@
     <!-- MATHEMATICS -->
     <div *ngIf="level.mode === 'mathematics'" class="mathematics-input">
 
-      <!-- Freitext-Eingabe (kein choices) -->
+      <!-- Freitext -->
       <ng-container *ngIf="!level.choices?.length">
-        <label class="math-label">Deine Antwort:</label>
+        <label class="math-label">✏️ &nbsp;Deine Antwort:</label>
         <input
           type="text"
-          class="form-control math-answer-input"
+          class="math-answer-input"
           [(ngModel)]="userCode"
-          placeholder="Gib deine Antwort ein…"
+          placeholder="Hier eingeben…"
+          autocomplete="off"
           (keydown.enter)="submit()">
       </ng-container>
 
-      <!-- Auswahl (choices vorhanden) -->
+      <!-- Auswahl-Buttons -->
       <ng-container *ngIf="level.choices?.length">
-        <label class="math-label">Wähle die richtige Antwort:</label>
+        <label class="math-label">👇 &nbsp;Wähle die richtige Antwort:</label>
         <div class="math-choices">
           <button
             *ngFor="let choice of level.choices"
-            class="btn math-choice-btn"
+            class="math-choice-btn"
             [class.selected]="userCode === choice"
             (click)="userCode = choice">
             {{ choice }}
@@ -75,29 +94,41 @@
 
   </section>
 
-  <!-- SUPPORT -->
-  <section class="level-support">
+  <!-- ── FEEDBACK ───────────────────────────────────────────── -->
+  <div *ngIf="feedback" class="feedback"
+       [class.feedback-success]="!submitting && userProgress && feedback.includes('Super')"
+       [class.feedback-error]="!submitting && feedback && !feedback.includes('Super')">
+    <span>{{ feedback }}</span>
+  </div>
 
+  <!-- ── HINTS ─────────────────────────────────────────────── -->
+  <section class="level-support">
     <div class="hints" *ngIf="level.hints?.length">
-      <button class="btn btn-sm btn-outline-secondary"
-              (click)="showHint()">
-        💡 Hinweis
+
+      <button class="btn-hint" (click)="showHint()"
+              *ngIf="usedHints.length < (level.hints?.length ?? 0)">
+        <span class="hint-icon">💡</span>
+        Hinweis anzeigen
+        <span style="opacity:.5; font-size:.8em;">({{ usedHints.length }}/{{ level.hints!.length }})</span>
       </button>
 
       <div *ngFor="let i of usedHints" class="hint">
         {{ level.hints![i].text }}
       </div>
+
     </div>
   </section>
 
-  <!-- ACTION BAR -->
+  <!-- ── ACTION BAR ─────────────────────────────────────────── -->
   <section class="level-actions">
-    <button class="btn btn-secondary" (click)="reset()">
-      Zurücksetzen
+    <button class="btn-reset" (click)="reset()">
+      🔄 Zurücksetzen
     </button>
 
-    <button class="btn btn-primary" (click)="submit()">
-      Prüfen
+    <button class="btn-submit" (click)="submit()" [disabled]="submitting || !userCode">
+      <ng-container *ngIf="!submitting">Antwort prüfen 🚀</ng-container>
+      <ng-container *ngIf="submitting">Wird geprüft…</ng-container>
     </button>
   </section>
+
 </div>
